@@ -1,0 +1,2 @@
+INSERT INTO todo (headline, description, status) VALUES ('Test Task 1', 'We have to do this task right now 1', 'Finished');
+INSERT INTO todo (headline, description, status) VALUES ('Test Task 2', 'We have to do this task right now 2', 'Waiting');
