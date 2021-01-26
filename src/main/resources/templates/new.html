@@ -19,8 +19,9 @@
 <div class="container p-3 my-3 bg-dark text-white">
     <div class="row">
         <div class="col">
-            <form action="#" th:action="@{/new}" th:object="${new_todo}" method="post">
+            <form action="#" th:action="@{/save}" th:object="${neworedit_todo}" method="post">
                 <div class="form-group">
+                    <input type="hidden" th:field="*{id}"/>
                     <label for="headline">Headline</label>
                     <span class="text-danger" th:if="${#fields.hasErrors('headline')}" th:errors="*{headline}">headline Error</span>
                     <input type="text" class="form-control" id="headline" th:field="*{headline}"/>

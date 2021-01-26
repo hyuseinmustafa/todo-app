@@ -39,8 +39,15 @@
                     <tr th:each="todo: ${todo_list}">
                         <td th:text="${todo.headline}">Thing</td>
                         <td th:text="${todo.description}">Do this</td>
-                        <td th:text="${todo.status}">Waiting</td>
-                        <td><a class="btn-sm btn-primary float-right" href="#" role="button" th:href="@{'/'+ ${todo.id} +'/delete'}">Delete</a></td>
+                        <td th:text="${todo.status}">Waiting
+                        </td>
+                        <td>
+                            <a class="btn-sm btn-primary float-right" href="#" role="button" th:href="@{'/'+ ${todo.id} +'/delete'}">Delete</a>
+                            <a class="btn-sm btn-primary float-right" href="#" role="button" th:href="@{'/'+ ${todo.id} +'/edit'}">Edit</a>
+                            <a class="btn-sm btn-primary" href="#" role="button"
+                               th:href="@{'/'+ ${todo.id} +'/done'}"
+                               th:if= "${todo.status.name == 'WAITING'}">Finish</a>
+                        </td>
                     </tr>
                 </tbody>
             </table>

@@ -1,21 +1,22 @@
 package com.hyusein.mustafa.todoapp.controller;
 
+import com.hyusein.mustafa.todoapp.ToDoStatus;
 import com.hyusein.mustafa.todoapp.command.TodoCommand;
 import com.hyusein.mustafa.todoapp.converter.TodoCommandToTodoConverter;
+import com.hyusein.mustafa.todoapp.converter.TodoToTodoCommandConverter;
 import com.hyusein.mustafa.todoapp.model.Todo;
 import com.hyusein.mustafa.todoapp.repository.TodoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -25,6 +26,11 @@ public class IndexController {
 
     public IndexController(TodoRepository todoRepository) {
         this.todoRepository = todoRepository;
+    }
+
+    @InitBinder
+    public void dataBinder(WebDataBinder dataBinder) {
+        //dataBinder.setDisallowedFields("id");
     }
 
     @GetMapping({"","/"})
@@ -42,19 +48,42 @@ public class IndexController {
     public String getNewToDoPage(Model model){
         log.debug("Add new ToDo Page Requested.");
 
-        model.addAttribute("new_todo", new TodoCommand());
+        model.addAttribute("neworedit_todo", new TodoCommand());
 
         return "new";
     }
 
-    @PostMapping({"/new"})
-    public String saveNewToDoPage(@Valid @ModelAttribute("new_todo") TodoCommand todo, BindingResult result){
+    @GetMapping("/{id}/edit")
+    public String getEditToDoPage(@PathVariable("id") Long id, Model model){
+        log.debug("Edit Todo.");
+
+        model.addAttribute("neworedit_todo", new TodoToTodoCommandConverter().convert(todoRepository.findById(id).orElse(null)));
+
+        return "new";
+    }
+
+    @GetMapping("/{id}/done")
+    public String getDoneToDoButton(@PathVariable("id") Long id, Model model){
+        log.debug("Done Todo. ID: " + id);
+
+        Optional<Todo> todoOptional = todoRepository.findById(id);
+        if(todoOptional.isPresent()){
+            Todo todo = todoOptional.get();
+            todo.setStatus(ToDoStatus.FINISHED);
+            todoRepository.save(todo);
+        }
+
+        return "redirect:/";
+    }
+
+    @PostMapping({"/save"})
+    public String saveNewToDoPage(@Valid @ModelAttribute("neworedit_todo") TodoCommand todo, BindingResult result){
         if(result.hasErrors()){
             log.debug("New ToDo page post Validation error.");
 
             return "new";
         }
-        log.debug("New ToDo Added.");
+        log.debug("ToDo saved id: " + todo.getId());
 
         todoRepository.save(new TodoCommandToTodoConverter().convert(todo));
 
