@@ -1,5 +1,6 @@
 package com.hyusein.mustafa.todoapp.model;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,4 +21,12 @@ public class Todo {
     @Lob
     private String description;
     private String status;
+
+    @Builder
+    public Todo(Long id, String headline, String description, String status) {
+        this.id = id;
+        this.headline = headline;
+        this.description = description;
+        this.status = status;
+    }
 }

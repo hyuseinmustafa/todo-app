@@ -18,7 +18,7 @@ public class IndexController {
         this.todoRepository = todoRepository;
     }
 
-    @GetMapping("")
+    @GetMapping({"","/"})
     public String getIndexPage(Model model) {
         List<Todo> todos = new ArrayList<>();
         todoRepository.findAll().forEach(todos::add);
