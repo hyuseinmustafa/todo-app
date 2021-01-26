@@ -32,6 +32,7 @@
                         <th>Headline</th>
                         <th>Description</th>
                         <th>Status</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -39,6 +40,7 @@
                         <td th:text="${todo.headline}">Thing</td>
                         <td th:text="${todo.description}">Do this</td>
                         <td th:text="${todo.status}">Waiting</td>
+                        <td><a class="btn-sm btn-primary float-right" href="#" role="button" th:href="@{'/'+ ${todo.id} +'/delete'}">Delete</a></td>
                     </tr>
                 </tbody>
             </table>
