@@ -19,23 +19,30 @@
     <div class="row">
         <h2>To Do list</h2>
     </div>
+    <div class="row">
+        <div class="col">
+            <a class="btn btn-primary" href="#" role="button"  th:href="@{/new}">New</a>
+        </div>
+    </div>
     <div class="row" th:if= "${not #lists.isEmpty(todo_list)}">
-        <table class="table-dark table-hover col-md-12">
-            <thead>
-                <tr>
-                    <th>Headline</th>
-                    <th>Description</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="todo: ${todo_list}">
-                    <td th:text="${todo.headline}">Thing</td>
-                    <td th:text="${todo.description}">Do this</td>
-                    <td th:text="${todo.status}">Waiting</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="col">
+            <table class="table-dark table-hover col-md-12">
+                <thead>
+                    <tr>
+                        <th>Headline</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="todo: ${todo_list}">
+                        <td th:text="${todo.headline}">Thing</td>
+                        <td th:text="${todo.description}">Do this</td>
+                        <td th:text="${todo.status}">Waiting</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 </body>

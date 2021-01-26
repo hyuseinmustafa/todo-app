@@ -1,4 +1,4 @@
-package com.hyusein.mustafa.todoapp.model;
+package com.hyusein.mustafa.todoapp.command;
 
 import com.hyusein.mustafa.todoapp.ToDoStatus;
 import lombok.Builder;
@@ -6,26 +6,25 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Lob;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
-@Getter
 @Setter
+@Getter
 @NoArgsConstructor
-@Entity
-@Table(name = "todo")
-public class Todo {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class TodoCommand {
     private Long id;
+    @NotNull
+    @Size(min=1, max=50)
     private String headline;
     @Lob
     private String description;
-    @Enumerated(EnumType.STRING)
+    @NotNull
     private ToDoStatus status;
 
     @Builder
-    public Todo(Long id, String headline, String description, ToDoStatus status) {
+    public TodoCommand(Long id, String headline, String description, ToDoStatus status) {
         this.id = id;
         this.headline = headline;
         this.description = description;

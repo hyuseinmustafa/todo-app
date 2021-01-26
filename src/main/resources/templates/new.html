@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>New To Do</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container p-3 my-3 bg-dark text-white">
+    <div class="row">
+        <div class="col">
+            <form action="#" th:action="@{/new}" th:object="${new_todo}" method="post">
+                <div class="form-group">
+                    <label for="headline">Headline</label>
+                    <span class="text-danger" th:if="${#fields.hasErrors('headline')}" th:errors="*{headline}">headline Error</span>
+                    <input type="text" class="form-control" id="headline" th:field="*{headline}"/>
+                    <label for="description">Description</label>
+                    <span class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">description Error</span>
+                    <textarea class="form-control" rows="5" id="description" th:field="*{description}"></textarea>
+                    <label for="status">Status</label>
+                    <span class="text-danger" th:if="${#fields.hasErrors('status')}" th:errors="*{status}">status Error</span>
+                    <select class="form-control" id="status" th:field="*{status}">
+                        <option value="" selected  hidden></option>
+                        <option th:each="sts : ${T(com.hyusein.mustafa.todoapp.ToDoStatus).values()}"
+                                th:value="${sts.name}" th:text="${sts}">options</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
