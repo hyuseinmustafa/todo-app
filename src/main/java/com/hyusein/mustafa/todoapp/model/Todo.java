@@ -10,12 +10,14 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @Entity
+@Table(name = "todo")
 public class Todo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String headline;
     @Lob
     private String description;
-    private boolean done;
+    private String status;
 }

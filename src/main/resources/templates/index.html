@@ -2,9 +2,41 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Index Page</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <h1>I am in the index page</h1>
+<div class="container p-3 my-3 bg-dark text-white">
+    <div class="row">
+        <h2>To Do list</h2>
+    </div>
+    <div class="row" th:if= "${not #lists.isEmpty(todo_list)}">
+        <table class="table-dark table-hover col-md-12">
+            <thead>
+                <tr>
+                    <th>Headline</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="todo: ${todo_list}">
+                    <td th:text="${todo.headline}">Thing</td>
+                    <td th:text="${todo.description}">Do this</td>
+                    <td th:text="${todo.status}">Waiting</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 </body>
 </html>
