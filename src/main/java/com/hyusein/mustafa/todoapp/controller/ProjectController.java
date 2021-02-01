@@ -3,6 +3,7 @@ package com.hyusein.mustafa.todoapp.controller;
 import com.hyusein.mustafa.todoapp.command.ProjectCommand;
 import com.hyusein.mustafa.todoapp.converter.ProjectCommandToProject;
 import com.hyusein.mustafa.todoapp.converter.ProjectToProjectCommand;
+import com.hyusein.mustafa.todoapp.model.Project;
 import com.hyusein.mustafa.todoapp.repository.ProjectRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -20,6 +23,17 @@ public class ProjectController {
 
     public ProjectController(ProjectRepository projectRepository) {
         this.projectRepository = projectRepository;
+    }
+
+    @GetMapping({"","/"})
+    public String getProjectsPage(Model model) {
+        log.debug("Projects Page Requested.");
+
+        List<Project> project_list = new ArrayList<>();
+        projectRepository.findAll().forEach(project_list::add);
+        model.addAttribute("project_list", project_list);
+
+        return "project/list";
     }
 
     @GetMapping("/new")
@@ -48,7 +62,7 @@ public class ProjectController {
 
         projectRepository.save(new ProjectCommandToProject().convert(project));
 
-        return "redirect:/";
+        return "redirect:/project";
     }
 
     @GetMapping("/{id}/delete")
@@ -57,6 +71,6 @@ public class ProjectController {
 
         projectRepository.deleteById(id);
 
-        return "redirect:/";
+        return "redirect:/project";
     }
 }
