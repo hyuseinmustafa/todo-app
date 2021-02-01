@@ -1,6 +1,7 @@
 package com.hyusein.mustafa.todoapp.command;
 
 import com.hyusein.mustafa.todoapp.ToDoStatus;
+import com.hyusein.mustafa.todoapp.model.Project;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,12 +23,15 @@ public class TodoCommand {
     private String description;
     @NotNull
     private ToDoStatus status;
+    @NotNull
+    private Project project;
 
     @Builder
-    public TodoCommand(Long id, String headline, String description, ToDoStatus status) {
+    public TodoCommand(Long id, String headline, String description, ToDoStatus status, Project project) {
         this.id = id;
         this.headline = headline;
         this.description = description;
         this.status = status;
+        this.project = project;
     }
 }

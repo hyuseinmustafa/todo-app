@@ -24,11 +24,16 @@ public class Todo {
     @Enumerated(EnumType.STRING)
     private ToDoStatus status;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "project_id")
+    private Project project;
+
     @Builder
-    public Todo(Long id, String headline, String description, ToDoStatus status) {
+    public Todo(Long id, String headline, String description, ToDoStatus status, Project project) {
         this.id = id;
         this.headline = headline;
         this.description = description;
         this.status = status;
+        this.project = project;
     }
 }
