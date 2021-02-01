@@ -1,5 +1,6 @@
 package com.hyusein.mustafa.todoapp.controller;
 
+import com.hyusein.mustafa.todoapp.ToDoStatus;
 import com.hyusein.mustafa.todoapp.model.Todo;
 import com.hyusein.mustafa.todoapp.repository.TodoRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,7 +34,7 @@ class IndexControllerTest {
     @Test
     void getIndexPage() throws Exception {
         List<Todo> list = new ArrayList<>();
-        list.add(Todo.builder().build());
+        list.add(Todo.builder().id(1L).status(ToDoStatus.WAITING).build());
 
         when(repository.findAll()).thenReturn(list);
 
