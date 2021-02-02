@@ -13,7 +13,7 @@ import java.util.List;
 @Slf4j
 @Service
 public class ProjectServiceImp implements ProjectService{
-    ProjectRepository repository;
+    private final ProjectRepository repository;
 
     public ProjectServiceImp(ProjectRepository repository) {
         this.repository = repository;
