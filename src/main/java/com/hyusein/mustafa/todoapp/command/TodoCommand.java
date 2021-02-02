@@ -24,10 +24,10 @@ public class TodoCommand {
     @NotNull
     private ToDoStatus status;
     @NotNull
-    private Project project;
+    private ProjectCommand project;
 
     @Builder
-    public TodoCommand(Long id, String headline, String description, ToDoStatus status, Project project) {
+    public TodoCommand(Long id, String headline, String description, ToDoStatus status, ProjectCommand project) {
         this.id = id;
         this.headline = headline;
         this.description = description;

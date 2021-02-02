@@ -26,7 +26,7 @@ public class Todo {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "project_id")
-    private Project project;
+    private Project project = new Project();
 
     @Builder
     public Todo(Long id, String headline, String description, ToDoStatus status, Project project) {

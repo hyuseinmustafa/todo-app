@@ -3,7 +3,9 @@ package com.hyusein.mustafa.todoapp.converter;
 import com.hyusein.mustafa.todoapp.command.TodoCommand;
 import com.hyusein.mustafa.todoapp.model.Todo;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
+@Component
 public class TodoToTodoCommandConverter implements Converter<Todo, TodoCommand> {
     @Override
     public TodoCommand convert(Todo source) {
@@ -14,7 +16,7 @@ public class TodoToTodoCommandConverter implements Converter<Todo, TodoCommand> 
         target.setHeadline(source.getHeadline());
         target.setDescription(source.getDescription());
         target.setStatus(source.getStatus());
-        target.setProject(source.getProject());
+        target.setProject(new ProjectToProjectCommandConverter().convert(source.getProject()));
         return target;
     }
 }
