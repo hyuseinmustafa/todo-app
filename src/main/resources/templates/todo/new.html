@@ -18,8 +18,8 @@
                     <input type="hidden" th:field="*{id}"/>
                     <label for="project">Project</label>
                     <span class="text-danger" th:if="${#fields.hasErrors('project')}" th:errors="*{project}">status Error</span>
-                    <select class="form-control" id="project" th:field="*{project}">
-                        <option value="" selected  hidden></option>
+                    <select class="form-control" id="project" th:field="*{project.id}">
+                        <option value="" selected="selected"  hidden></option>
                         <option th:each="sts : ${project_list}"
                                 th:value="${sts.id}" th:text="${sts.name}">options</option>
                     </select>
@@ -32,7 +32,7 @@
                     <label for="status">Status</label>
                     <span class="text-danger" th:if="${#fields.hasErrors('status')}" th:errors="*{status}">status Error</span>
                     <select class="form-control" id="status" th:field="*{status}">
-                        <option value="" selected  hidden></option>
+                        <option value="" selected="selected"  hidden></option>
                         <option th:each="sts : ${T(com.hyusein.mustafa.todoapp.ToDoStatus).values()}"
                                 th:value="${sts.name}" th:text="${sts}">options</option>
                     </select>
