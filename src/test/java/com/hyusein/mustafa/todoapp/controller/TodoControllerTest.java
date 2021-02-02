@@ -3,12 +3,9 @@ package com.hyusein.mustafa.todoapp.controller;
 import com.hyusein.mustafa.todoapp.ToDoStatus;
 import com.hyusein.mustafa.todoapp.command.ProjectCommand;
 import com.hyusein.mustafa.todoapp.command.TodoCommand;
-import com.hyusein.mustafa.todoapp.model.Project;
-import com.hyusein.mustafa.todoapp.model.Todo;
-import com.hyusein.mustafa.todoapp.repository.ProjectRepository;
-import com.hyusein.mustafa.todoapp.repository.TodoRepository;
 import com.hyusein.mustafa.todoapp.service.ProjectService;
 import com.hyusein.mustafa.todoapp.service.TodoService;
+import io.florianlopes.spring.test.web.servlet.request.MockMvcRequestBuilderUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -24,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(TodoController.class)
@@ -98,18 +94,36 @@ class TodoControllerTest {
         verify(todoService, times(1)).done(Mockito.anyLong());
     }
 
+    /*
+    * Regular MockMvc test gives an Type conversation error from String To TodoCommand object
+    * To overcome this issue added dependency for "Spring MVC Test utils"
+    * link: "https://github.com/f-lopes/spring-mvc-test-utils/"
+    *
+	*	<dependency>
+	*		<groupId>io.florianlopes</groupId>
+	*		<artifactId>spring-mvc-test-utils</artifactId>
+	*		<version>2.3.0</version>
+	*		<scope>test</scope>
+	*	</dependency>
+    *
+     */
     @Test
     void saveNewToDoPage() throws Exception {
+        TodoCommand todoCommand = TodoCommand.builder()
+                .id(1L)
+                .headline("headline")
+                .description("")
+                .status(ToDoStatus.WAITING)
+                .project(ProjectCommand.builder().id(2L).name("name").build())
+                .build();
 
-//        mockMvc.perform(post("/todo/save")
-//                    .param("headline", "test headline")
-//                    .param("status", "WAITING")
-//                    .param("project", "1")
-//                )
-//                .andExpect(status().is3xxRedirection())
-//                .andExpect(view().name("redirect:/project"));
-//
-//        verify(todoService, times(1)).save(Mockito.any(TodoCommand.class));
+        when(todoService.save(Mockito.any())).thenReturn(todoCommand);
+
+        mockMvc.perform(MockMvcRequestBuilderUtils.postForm("/todo/save", todoCommand))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/"));
+
+        verify(todoService, times(1)).save(Mockito.any(TodoCommand.class));
     }
 
     @Test
