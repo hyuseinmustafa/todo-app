@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Setter
@@ -21,7 +22,7 @@ public class Project {
     private String name;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-    private Set<Todo> todo;
+    private Set<Todo> todo = new HashSet<>();
 
     @Builder
     public Project(Long id, String name, Set<Todo> todo) {
