@@ -1,9 +1,9 @@
 package com.hyusein.mustafa.todoapp.controller;
 
 import com.hyusein.mustafa.todoapp.ToDoStatus;
-import com.hyusein.mustafa.todoapp.model.Project;
-import com.hyusein.mustafa.todoapp.model.Todo;
-import com.hyusein.mustafa.todoapp.repository.TodoRepository;
+import com.hyusein.mustafa.todoapp.command.ProjectCommand;
+import com.hyusein.mustafa.todoapp.command.TodoCommand;
+import com.hyusein.mustafa.todoapp.service.TodoService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class IndexControllerTest {
 
     @MockBean
-    TodoRepository repository;
+    TodoService todoService;
 
     @Autowired
     private MockMvc mockMvc;
@@ -34,12 +34,11 @@ class IndexControllerTest {
 
     @Test
     void getIndexPage() throws Exception {
-        List<Todo> list = new ArrayList<>();
-        Project project = Project.builder().id(1L).name("test").build();
+        List<TodoCommand> list = new ArrayList<>();
+        ProjectCommand project = ProjectCommand.builder().id(1L).name("test").build();
+        list.add(TodoCommand.builder().id(1L).project(project).status(ToDoStatus.WAITING).build());
 
-        list.add(Todo.builder().id(1L).project(project).status(ToDoStatus.WAITING).build());
-
-        when(repository.findAll()).thenReturn(list);
+        when(todoService.findAll()).thenReturn(list);
 
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
