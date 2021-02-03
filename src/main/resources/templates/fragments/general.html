@@ -15,6 +15,10 @@
 </head>
 <body>
     <div th:fragment="header">
+        <form th:action="@{/logout}" method="post">
+            <input class="btn-sm btn-primary float-right" type="submit" value="Sign Out"/>
+        </form>
+        <h2 class="float-right" th:inline="text">Hi [[${#httpServletRequest.remoteUser}]]</h2>
         <h1>Thymeleaf Fragments sample</h1>
     </div>
     <p>Go to the next page to see fragments in action</p>
