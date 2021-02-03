@@ -21,12 +21,14 @@
                 <thead>
                 <tr>
                     <th>Name</th>
+                    <th>Number of Todos</th>
                     <th></th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="project: ${project_list}">
                     <td th:text="${project.name}">name</td>
+                    <td th:text="${project.todos.size}">size</td>
                     </td>
                     <td>
                         <a class="btn-sm btn-primary float-right" href="#" role="button" th:href="@{'/project/'+ ${project.id} +'/delete'}">Delete</a>

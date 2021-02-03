@@ -1,5 +1,6 @@
 package com.hyusein.mustafa.todoapp.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.hyusein.mustafa.todoapp.ToDoStatus;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,9 +25,10 @@ public class Todo {
     @Enumerated(EnumType.STRING)
     private ToDoStatus status;
 
+    @JsonManagedReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "project_id")
-    private Project project = new Project();
+    private Project project;
 
     @Builder
     public Todo(Long id, String headline, String description, ToDoStatus status, Project project) {

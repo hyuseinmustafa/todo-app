@@ -1,12 +1,9 @@
 package com.hyusein.mustafa.todoapp.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
 
 @Setter
@@ -21,13 +18,14 @@ public class Project {
     private Long id;
     private String name;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-    private Set<Todo> todo = new HashSet<>();
+    private Set<Todo> todos;
 
     @Builder
-    public Project(Long id, String name, Set<Todo> todo) {
+    public Project(Long id, String name, Set<Todo> todos) {
         this.id = id;
         this.name = name;
-        this.todo = todo;
+        this.todos = todos;
     }
 }

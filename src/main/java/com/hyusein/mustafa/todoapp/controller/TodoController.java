@@ -1,6 +1,8 @@
 package com.hyusein.mustafa.todoapp.controller;
 
 import com.hyusein.mustafa.todoapp.command.TodoCommand;
+import com.hyusein.mustafa.todoapp.converter.TodoToTodoCommandConverter;
+import com.hyusein.mustafa.todoapp.model.Todo;
 import com.hyusein.mustafa.todoapp.service.ProjectService;
 import com.hyusein.mustafa.todoapp.service.TodoService;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +38,7 @@ public class TodoController {
         log.debug("Add new ToDo Page Requested.");
 
         model.addAttribute("neworedit_todo", new TodoCommand());
-        model.addAttribute("project_list", projectService.findAll());
+        model.addAttribute("project_list", projectService.findAllAsCommand());
 
         return "todo/new";
     }
@@ -45,8 +47,8 @@ public class TodoController {
     public String getEditToDoPage(@PathVariable("id") Long id, Model model){
         log.debug("Edit Todo.");
 
-        model.addAttribute("neworedit_todo", todoService.findById(id));
-        model.addAttribute("project_list", projectService.findAll());
+        model.addAttribute("neworedit_todo", new TodoToTodoCommandConverter().convert(todoService.findById(id)));
+        model.addAttribute("project_list", projectService.findAllAsCommand());
 
         return "todo/new";
     }
@@ -66,12 +68,12 @@ public class TodoController {
         if(result.hasErrors()){
             log.debug("New ToDo page post Validation error.");
 
-            model.addAttribute("project_list", projectService.findAll());
+            model.addAttribute("project_list", projectService.findAllAsCommand());
 
             return "todo/new";
         }
 
-        TodoCommand savedTodo = todoService.save(todo);
+        Todo savedTodo = todoService.save(todo);
 
         log.debug("ToDo saved id: " + savedTodo.getId());
 

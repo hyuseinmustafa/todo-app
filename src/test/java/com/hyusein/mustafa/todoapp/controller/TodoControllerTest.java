@@ -3,6 +3,8 @@ package com.hyusein.mustafa.todoapp.controller;
 import com.hyusein.mustafa.todoapp.ToDoStatus;
 import com.hyusein.mustafa.todoapp.command.ProjectCommand;
 import com.hyusein.mustafa.todoapp.command.TodoCommand;
+import com.hyusein.mustafa.todoapp.model.Project;
+import com.hyusein.mustafa.todoapp.model.Todo;
 import com.hyusein.mustafa.todoapp.service.ProjectService;
 import com.hyusein.mustafa.todoapp.service.TodoService;
 import io.florianlopes.spring.test.web.servlet.request.MockMvcRequestBuilderUtils;
@@ -44,20 +46,20 @@ class TodoControllerTest {
         List<ProjectCommand> list = new ArrayList<>();
         list.add(ProjectCommand.builder().id(1L).name("test").build());
 
-        when(projectService.findAll()).thenReturn(list);
+        when(projectService.findAllAsCommand()).thenReturn(list);
 
         mockMvc.perform(get("/todo/new"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("neworedit_todo", hasProperty("project")))
                 .andExpect(view().name("todo/new"));
 
-        verify(projectService, times(1)).findAll();
+        verify(projectService, times(1)).findAllAsCommand();
         verifyNoInteractions(todoService);
     }
     @Test
     void getEditToDoPage() throws Exception {
-        ProjectCommand project =  ProjectCommand.builder().id(1L).name("test").build();
-        TodoCommand todo = TodoCommand.builder()
+        Project project =  Project.builder().id(1L).name("test").build();
+        Todo todo = Todo.builder()
                 .id(1L)
                 .headline("test headline")
                 .status(ToDoStatus.WAITING)
@@ -71,14 +73,14 @@ class TodoControllerTest {
                 .andExpect(model().attribute("neworedit_todo", hasProperty("project")))
                 .andExpect(view().name("todo/new"));
 
-        verify(projectService, times(1)).findAll();
+        verify(projectService, times(1)).findAllAsCommand();
         verify(todoService, times(1)).findById(Mockito.anyLong());
     }
 
     @Test
     void getDoneToDoDoneButton() throws Exception {
-        ProjectCommand project =  ProjectCommand.builder().id(1L).name("test").build();
-        TodoCommand todo = TodoCommand.builder()
+        Project project =  Project.builder().id(1L).name("test").build();
+        Todo todo = Todo.builder()
                 .id(1L)
                 .headline("test headline")
                 .status(ToDoStatus.WAITING)
@@ -109,6 +111,14 @@ class TodoControllerTest {
      */
     @Test
     void saveNewToDoPage() throws Exception {
+        Todo todo = Todo.builder()
+                .id(1L)
+                .headline("headline")
+                .description("")
+                .status(ToDoStatus.WAITING)
+                .project(Project.builder().id(2L).name("name").build())
+                .build();
+
         TodoCommand todoCommand = TodoCommand.builder()
                 .id(1L)
                 .headline("headline")
@@ -117,7 +127,7 @@ class TodoControllerTest {
                 .project(ProjectCommand.builder().id(2L).name("name").build())
                 .build();
 
-        when(todoService.save(Mockito.any())).thenReturn(todoCommand);
+        when(todoService.save(Mockito.any())).thenReturn(todo);
 
         mockMvc.perform(MockMvcRequestBuilderUtils.postForm("/todo/save", todoCommand))
                 .andExpect(status().is3xxRedirection())

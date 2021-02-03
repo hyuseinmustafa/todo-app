@@ -1,6 +1,7 @@
 package com.hyusein.mustafa.todoapp.controller;
 
 import com.hyusein.mustafa.todoapp.command.ProjectCommand;
+import com.hyusein.mustafa.todoapp.model.Project;
 import com.hyusein.mustafa.todoapp.service.ProjectService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasProperty;
@@ -34,8 +36,8 @@ class ProjectControllerTest {
 
     @Test
     void getProjectsPage() throws Exception {
-        List<ProjectCommand> list = new ArrayList<>();
-        list.add(ProjectCommand.builder().id(1L).name("test").build());
+        List<Project> list = new ArrayList<>();
+        list.add(Project.builder().id(1L).name("test").todos(new HashSet<>()).build());
 
         when(service.findAll()).thenReturn(list);
 
@@ -59,7 +61,7 @@ class ProjectControllerTest {
 
     @Test
     void getEditProjectPage() throws Exception {
-        ProjectCommand project = ProjectCommand.builder().id(1L).name("test").build();
+        Project project = Project.builder().id(1L).name("test").build();
 
         when(service.findById(Mockito.anyLong())).thenReturn(project);
 
@@ -74,7 +76,7 @@ class ProjectControllerTest {
 
     @Test
     void saveNewProjectPage() throws Exception {
-        ProjectCommand project = ProjectCommand.builder().id(1L).name("test").build();
+        Project project = Project.builder().id(1L).name("test").build();
 
         when(service.save(Mockito.any())).thenReturn(project);
 

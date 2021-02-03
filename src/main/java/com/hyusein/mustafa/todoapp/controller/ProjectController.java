@@ -1,6 +1,8 @@
 package com.hyusein.mustafa.todoapp.controller;
 
 import com.hyusein.mustafa.todoapp.command.ProjectCommand;
+import com.hyusein.mustafa.todoapp.converter.ProjectToProjectCommandConverter;
+import com.hyusein.mustafa.todoapp.model.Project;
 import com.hyusein.mustafa.todoapp.service.ProjectService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -43,7 +45,7 @@ public class ProjectController {
     public String getEditProjectPage(@PathVariable("id") Long id, Model model){
         log.debug("Edit Project Page Requested.");
 
-        model.addAttribute("neworedit_project", projectService.findById(id));
+        model.addAttribute("neworedit_project", new ProjectToProjectCommandConverter().convert(projectService.findById(id)));
 
         return "project/new";
     }
@@ -56,7 +58,7 @@ public class ProjectController {
             return "project/new";
         }
 
-        ProjectCommand savedProject = projectService.save(project);
+        Project savedProject = projectService.save(project);
 
         log.debug("Project saved id: " + savedProject.getId());
 

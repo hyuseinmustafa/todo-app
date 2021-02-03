@@ -3,8 +3,8 @@ package com.hyusein.mustafa.todoapp.service;
 import com.hyusein.mustafa.todoapp.ToDoStatus;
 import com.hyusein.mustafa.todoapp.command.TodoCommand;
 import com.hyusein.mustafa.todoapp.converter.TodoCommandToTodoConverter;
-import com.hyusein.mustafa.todoapp.converter.TodoToTodoCommandConverter;
 import com.hyusein.mustafa.todoapp.model.Todo;
+import com.hyusein.mustafa.todoapp.repository.ProjectRepository;
 import com.hyusein.mustafa.todoapp.repository.TodoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,29 +17,28 @@ import java.util.Optional;
 @Service
 public class TodoServiceImpl implements TodoService{
     private final TodoRepository repository;
+    private final ProjectRepository projectRepository;
 
-    public TodoServiceImpl(TodoRepository repository) {
+    public TodoServiceImpl(TodoRepository repository, ProjectRepository projectRepository) {
         this.repository = repository;
+        this.projectRepository = projectRepository;
     }
 
     @Override
-    public List<TodoCommand> findAll() {
-        List<TodoCommand> list = new ArrayList<>();
-        repository.findAll().forEach(value ->
-                list.add(new TodoToTodoCommandConverter().convert(value)));
+    public List<Todo> findAll() {
+        List<Todo> list = new ArrayList<>();
+        repository.findAll().forEach(list::add);
         return list;
     }
 
     @Override
-    public TodoCommand findById(Long id) {
-        return new TodoToTodoCommandConverter().convert(repository.findById(id).orElse(null));
+    public Todo findById(Long id) {
+        return repository.findById(id).orElse(null);
     }
 
     @Override
-    public TodoCommand save(TodoCommand todoCommand) {
-        return new TodoToTodoCommandConverter().convert(
-                repository.save(new TodoCommandToTodoConverter().convert(todoCommand))
-        );
+    public Todo save(TodoCommand todoCommand) {
+        return repository.save(new TodoCommandToTodoConverter().convert(todoCommand));
     }
 
     @Override

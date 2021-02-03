@@ -7,6 +7,9 @@ import com.hyusein.mustafa.todoapp.model.Project;
 import com.hyusein.mustafa.todoapp.model.Todo;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ConverterTest {
@@ -20,11 +23,12 @@ class ConverterTest {
     private final static ProjectCommand TODO_PROJECT_COMMAND = new ProjectCommand().builder()
             .id(PROJECT_ID).name(PROJECT_NAME).build();
     private final static Project TODO_PROJECT = new Project().builder()
-            .id(PROJECT_ID).name(PROJECT_NAME).build();
+            .id(PROJECT_ID).name(PROJECT_NAME).todos(new HashSet<>()).build();
 
     @Test
     void ProjectCommandToProjectConvert() {
-        ProjectCommand src = ProjectCommand.builder().id(PROJECT_ID).name(PROJECT_NAME).build();
+        ProjectCommand src = ProjectCommand.builder()
+                .id(PROJECT_ID).name(PROJECT_NAME).build();
         Project trg = new ProjectCommandToProjectConverter().convert(src);
 
         assertNull(new ProjectCommandToProjectConverter().convert(null));
@@ -35,7 +39,10 @@ class ConverterTest {
 
     @Test
     void ProjectToProjectCommandConvert() {
-        Project src = Project.builder().id(PROJECT_ID).name(PROJECT_NAME).build();
+        Set<Todo> todos = new HashSet<>();
+        todos.add(Todo.builder().build());
+
+        Project src = Project.builder().id(PROJECT_ID).name(PROJECT_NAME).todos(todos).build();
         ProjectCommand trg = new ProjectToProjectCommandConverter().convert(src);
 
         assertNull(new ProjectToProjectCommandConverter().convert(null));
