@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="headerfiles">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,7 +18,11 @@
         <form th:action="@{/logout}" method="post">
             <input class="btn-sm btn-primary float-right" type="submit" value="Sign Out"/>
         </form>
-        <h2 class="float-right" th:inline="text">Hi [[${#httpServletRequest.remoteUser}]]</h2>
+        <div class="float-right" >
+            <p th:inline="text">Hi <span sec:authentication="name"></span></p>
+            <p th:inline="text">Roles <span th:text="${#authentication.principal.authorities}"></span></p>
+        </div>
+
         <h1>Thymeleaf Fragments sample</h1>
     </div>
     <p>Go to the next page to see fragments in action</p>
