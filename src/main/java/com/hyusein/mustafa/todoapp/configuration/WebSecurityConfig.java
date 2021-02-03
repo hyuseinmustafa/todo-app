@@ -50,7 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/h2-console/**").permitAll()
+                    .antMatchers("/h2-console/**").permitAll()//added for h2-console access without authentication
                     .anyRequest().authenticated()
                     .and()
                 .formLogin()
@@ -58,9 +58,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .permitAll()
                     .and()
                 .logout()
+                    .deleteCookies("JSESSIONID")
                     .permitAll()
-                .and().csrf().ignoringAntMatchers("/h2-console/**")
-                .and().headers().frameOptions().sameOrigin();
+                .and().csrf().ignoringAntMatchers("/h2-console/**")//added for h2-console access without authentication
+                .and().headers().frameOptions().sameOrigin()//added for h2-console access without authentication
+                .and().rememberMe().key("uniqueAndSecret")
+        ;
     }
 
 /*    @Bean
