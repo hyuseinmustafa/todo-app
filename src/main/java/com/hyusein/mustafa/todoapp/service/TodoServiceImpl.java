@@ -16,12 +16,11 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class TodoServiceImpl implements TodoService{
-    private final TodoRepository repository;
-    private final ProjectRepository projectRepository;
 
-    public TodoServiceImpl(TodoRepository repository, ProjectRepository projectRepository) {
+    private final TodoRepository repository;
+
+    public TodoServiceImpl(TodoRepository repository) {
         this.repository = repository;
-        this.projectRepository = projectRepository;
     }
 
     @Override
