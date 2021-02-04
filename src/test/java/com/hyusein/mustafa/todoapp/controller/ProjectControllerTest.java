@@ -2,13 +2,21 @@ package com.hyusein.mustafa.todoapp.controller;
 
 import com.hyusein.mustafa.todoapp.command.ProjectCommand;
 import com.hyusein.mustafa.todoapp.model.Project;
+import com.hyusein.mustafa.todoapp.repository.UserRepository;
 import com.hyusein.mustafa.todoapp.service.ProjectService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -21,8 +29,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(ProjectController.class)
+//@WebMvcTest(ProjectController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
+@WithMockUser
 class ProjectControllerTest {
+
+    private String TOKEN_ATTR_NAME;
+    HttpSessionCsrfTokenRepository httpSessionCsrfTokenRepository;
+    CsrfToken csrfToken;
 
     @MockBean
     ProjectService service;
@@ -32,6 +47,9 @@ class ProjectControllerTest {
 
     @BeforeEach
     void setUp() {
+        TOKEN_ATTR_NAME = "org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository.CSRF_TOKEN";
+        httpSessionCsrfTokenRepository = new HttpSessionCsrfTokenRepository();
+        csrfToken = httpSessionCsrfTokenRepository.generateToken(new MockHttpServletRequest());
     }
 
     @Test
@@ -80,7 +98,9 @@ class ProjectControllerTest {
 
         when(service.save(Mockito.any())).thenReturn(project);
 
-        mockMvc.perform(post("/project/save").param("name", "test"))
+        mockMvc.perform(post("/project/save").param("name", "test")
+                .sessionAttr(TOKEN_ATTR_NAME, csrfToken)
+                .param(csrfToken.getParameterName(), csrfToken.getToken()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/project"));
 

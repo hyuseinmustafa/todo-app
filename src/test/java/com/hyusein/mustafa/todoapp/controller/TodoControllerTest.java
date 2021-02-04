@@ -12,8 +12,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.*;
@@ -25,8 +31,15 @@ import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(TodoController.class)
+//@WebMvcTest(TodoController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
+@WithMockUser
 class TodoControllerTest {
+
+    private String TOKEN_ATTR_NAME;
+    HttpSessionCsrfTokenRepository httpSessionCsrfTokenRepository;
+    CsrfToken csrfToken;
 
     @MockBean
     TodoService todoService;
@@ -39,6 +52,9 @@ class TodoControllerTest {
 
     @BeforeEach
     void setUp() {
+        TOKEN_ATTR_NAME = "org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository.CSRF_TOKEN";
+        httpSessionCsrfTokenRepository = new HttpSessionCsrfTokenRepository();
+        csrfToken = httpSessionCsrfTokenRepository.generateToken(new MockHttpServletRequest());
     }
 
     @Test
@@ -129,7 +145,9 @@ class TodoControllerTest {
 
         when(todoService.save(Mockito.any())).thenReturn(todo);
 
-        mockMvc.perform(MockMvcRequestBuilderUtils.postForm("/todo/save", todoCommand))
+        mockMvc.perform(MockMvcRequestBuilderUtils.postForm("/todo/save", todoCommand)
+                .sessionAttr(TOKEN_ATTR_NAME, csrfToken)
+                .param(csrfToken.getParameterName(), csrfToken.getToken()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/"));
 

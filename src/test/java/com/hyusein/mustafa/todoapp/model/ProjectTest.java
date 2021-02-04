@@ -8,6 +8,7 @@ import java.util.HashSet;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ProjectTest {
+
     private final static Long ID = 1L;
     private final static String NAME = "name";
     private final static Todo TODO = Todo.builder().build();

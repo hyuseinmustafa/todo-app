@@ -28,14 +28,11 @@ class TodoServiceTest {
     @Mock
     TodoRepository todoRepository;
 
-    @Mock
-    ProjectRepository projectRepository;
-
     TodoService todoService;
 
     @BeforeEach
     void setUp() {
-        todoService = new TodoServiceImpl(todoRepository, projectRepository);
+        todoService = new TodoServiceImpl(todoRepository);
     }
 
     @Test

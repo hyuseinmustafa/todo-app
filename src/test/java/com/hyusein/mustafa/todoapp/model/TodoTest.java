@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TodoTest {
+
     private static final Long ID = 1L;
     private static final String HEADLINE = "headline";
     private static final String DESCRIPTION = "description";
