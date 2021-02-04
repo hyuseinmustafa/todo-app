@@ -6,7 +6,7 @@ INSERT INTO todo (headline, description, status, project_id) VALUES ('Initial Ta
 
 INSERT INTO authority (name, id) VALUES ('ADMIN', 1);
 INSERT INTO authority (name, id) VALUES ('USER', 2);
-INSERT INTO user (id, username, password) VALUES (1,'admin','$2a$10$fC5DugP7AHdhI7yxvQcZnOrpZLu.fYv1gIl0qNid3aXG4Z7porzrm');
-INSERT INTO user (id, username, password) VALUES (2,'user','$2a$10$RE2ifF325M8iTVdjdxn1RebS3VmUqmyoyNz0DDMrsE4cHJrGXkOCe');
+INSERT INTO user (id, username, password, email) VALUES (1,'admin','$2a$10$fC5DugP7AHdhI7yxvQcZnOrpZLu.fYv1gIl0qNid3aXG4Z7porzrm', 'asd@asd.com');
+INSERT INTO user (id, username, password, email) VALUES (2,'user','$2a$10$RE2ifF325M8iTVdjdxn1RebS3VmUqmyoyNz0DDMrsE4cHJrGXkOCe', 'asd@gg.com');
 INSERT INTO user_authority (authority_id, user_id) VALUES (1, 1);
 INSERT INTO user_authority (authority_id, user_id) VALUES (2, 2);
