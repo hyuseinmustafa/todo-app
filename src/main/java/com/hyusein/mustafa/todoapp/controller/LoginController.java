@@ -17,7 +17,7 @@ public class LoginController {
     @GetMapping
     public String getUserLoginPage() {
         if(isAuthenticated()) return "redirect:/";
-        return "/login";
+        return "login";
     }
 
     /*
