@@ -5,8 +5,8 @@ import com.hyusein.mustafa.todoapp.command.ProjectCommand;
 import com.hyusein.mustafa.todoapp.command.TodoCommand;
 import com.hyusein.mustafa.todoapp.model.Project;
 import com.hyusein.mustafa.todoapp.model.Todo;
-import com.hyusein.mustafa.todoapp.repository.ProjectRepository;
 import com.hyusein.mustafa.todoapp.repository.TodoRepository;
+import com.hyusein.mustafa.todoapp.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,11 +28,14 @@ class TodoServiceTest {
     @Mock
     TodoRepository todoRepository;
 
+    @Mock
+    UserRepository userRepository;
+
     TodoService todoService;
 
     @BeforeEach
     void setUp() {
-        todoService = new TodoServiceImpl(todoRepository);
+        todoService = new TodoServiceImpl(todoRepository, userRepository);
     }
 
     @Test
@@ -107,7 +110,7 @@ class TodoServiceTest {
 
         when(todoRepository.save(Mockito.any())).thenReturn(todo);
 
-        Todo res = todoService.save(todoCommand);
+        Todo res = todoService.saveCommand(todoCommand);
 
         verify(todoRepository, times(1)).save(Mockito.any());
 

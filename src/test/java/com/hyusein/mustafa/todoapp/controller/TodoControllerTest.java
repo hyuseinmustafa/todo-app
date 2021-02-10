@@ -58,6 +58,7 @@ class TodoControllerTest {
     }
 
     @Test
+    @WithMockUser(authorities = {"CREATE"})
     void getNewToDoPage() throws Exception {
         List<ProjectCommand> list = new ArrayList<>();
         list.add(ProjectCommand.builder().id(1L).name("test").build());
@@ -73,6 +74,7 @@ class TodoControllerTest {
         verifyNoInteractions(todoService);
     }
     @Test
+    @WithMockUser(authorities = {"EDIT"})
     void getEditToDoPage() throws Exception {
         Project project =  Project.builder().id(1L).name("test").build();
         Todo todo = Todo.builder()
@@ -126,6 +128,7 @@ class TodoControllerTest {
     *
      */
     @Test
+    @WithMockUser(authorities = {"EDIT"})
     void saveNewToDoPage() throws Exception {
         Todo todo = Todo.builder()
                 .id(1L)
@@ -143,7 +146,7 @@ class TodoControllerTest {
                 .project(ProjectCommand.builder().id(2L).name("name").build())
                 .build();
 
-        when(todoService.save(Mockito.any())).thenReturn(todo);
+        when(todoService.saveCommand(Mockito.any())).thenReturn(todo);
 
         mockMvc.perform(MockMvcRequestBuilderUtils.postForm("/todo/save", todoCommand)
                 .sessionAttr(TOKEN_ATTR_NAME, csrfToken)
@@ -151,10 +154,11 @@ class TodoControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/"));
 
-        verify(todoService, times(1)).save(Mockito.any(TodoCommand.class));
+        verify(todoService, times(1)).saveCommand(Mockito.any(TodoCommand.class));
     }
 
     @Test
+    @WithMockUser(authorities = {"DELETE"})
     void deleteToDoPage() throws Exception {
         mockMvc.perform(get("/todo/1/delete"))
                 .andExpect(status().is3xxRedirection())
