@@ -1,4 +1,4 @@
-package com.hyusein.mustafa.todoapp.customannotation;
+package com.hyusein.mustafa.todoapp.annotation;
 
 import com.hyusein.mustafa.todoapp.command.UserRegistrationCommand;
 
@@ -10,6 +10,7 @@ public class PasswordMatchesValidator implements ConstraintValidator<PasswordMat
     @Override
     public void initialize(PasswordMatches constraintAnnotation) {
     }
+
     @Override
     public boolean isValid(Object obj, ConstraintValidatorContext context){
         UserRegistrationCommand user = (UserRegistrationCommand) obj;

@@ -1,4 +1,4 @@
-package com.hyusein.mustafa.todoapp.customannotation;
+package com.hyusein.mustafa.todoapp.annotation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

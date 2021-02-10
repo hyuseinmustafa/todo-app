@@ -30,6 +30,10 @@ public class Todo {
     @JoinColumn(name = "project_id")
     private Project project;
 
+    @ManyToOne
+    @JoinColumn(name = "assigned_user_id")
+    private User assignedUser;
+
     @Builder
     public Todo(Long id, String headline, String description, ToDoStatus status, Project project) {
         this.id = id;

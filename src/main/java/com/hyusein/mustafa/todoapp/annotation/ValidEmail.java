@@ -1,9 +1,8 @@
-package com.hyusein.mustafa.todoapp.customannotation;
+package com.hyusein.mustafa.todoapp.annotation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -15,8 +14,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Constraint(validatedBy = EmailValidator.class)
 @Documented
-@NotNull(message = "Email must not be empty")
-@NotEmpty(message = "Email must not be empty")
+@NotBlank(message = "Email must not be empty")
 public @interface ValidEmail {
     String message() default "Invalid email";
     Class<?>[] groups() default {};

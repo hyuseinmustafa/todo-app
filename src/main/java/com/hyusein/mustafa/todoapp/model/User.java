@@ -1,5 +1,6 @@
 package com.hyusein.mustafa.todoapp.model;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -7,8 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collection;
 
 @Getter
 @Setter
@@ -30,12 +30,27 @@ public class User implements Serializable {
 
     private String firstName;
     private String lastName;
+    private boolean enabled;
 
     @NotEmpty
     @Column(nullable = false, unique = true)
     private String email;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "user_authority", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = {@JoinColumn(name = "authority_id")})
-    private Set<Authority> authorities = new HashSet<>();
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "users_roles",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id")})
+    private Collection<Role> roles;
+
+    @Builder
+    public User(Long id, @NotEmpty String username, @NotEmpty String password, String firstName, String lastName, boolean enabled, @NotEmpty String email, Collection<Role> roles) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.enabled = enabled;
+        this.email = email;
+        this.roles = roles;
+    }
 }

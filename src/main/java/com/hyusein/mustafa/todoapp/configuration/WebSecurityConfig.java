@@ -1,7 +1,6 @@
 package com.hyusein.mustafa.todoapp.configuration;
 
 import com.hyusein.mustafa.todoapp.service.UserDetailsServiceImpl;
-import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -9,6 +8,9 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,7 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);
-    };
+    }
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider(){
@@ -41,11 +43,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(authenticationProvider());
     }
 
-    // Register HttpSessionEventPublisher
     @Bean
-    public static ServletListenerRegistrationBean<HttpSessionEventPublisher> httpSessionEventPublisher() {
-        return new ServletListenerRegistrationBean<HttpSessionEventPublisher>(new HttpSessionEventPublisher());
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
     }
+
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        SessionRegistry sessionRegistry = new SessionRegistryImpl();
+        return sessionRegistry;
+    }
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -79,8 +87,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .key("rememberMeToken")
         .and()
                 .sessionManagement()
+                .sessionFixation().newSession()
                     .maximumSessions(1)
-                        .maxSessionsPreventsLogin(true)
+                        .maxSessionsPreventsLogin(true)//.sessionRegistry(sessionRegistry())
+                .and().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
         ;
     }
 }

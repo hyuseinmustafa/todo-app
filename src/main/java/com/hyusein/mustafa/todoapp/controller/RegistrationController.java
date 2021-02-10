@@ -1,29 +1,23 @@
 package com.hyusein.mustafa.todoapp.controller;
 
 import com.hyusein.mustafa.todoapp.command.UserRegistrationCommand;
-import com.hyusein.mustafa.todoapp.customexception.UserAlreadyExistException;
+import com.hyusein.mustafa.todoapp.exception.UserAlreadyExistException;
 import com.hyusein.mustafa.todoapp.model.User;
-import com.hyusein.mustafa.todoapp.service.UserDetailsServiceImpl;
 import com.hyusein.mustafa.todoapp.service.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+@Slf4j
 @Controller
 @RequestMapping("/registration")
 public class RegistrationController {
-    private static final Logger log = LoggerFactory.getLogger(RegistrationController.class);
 
     UserService userService;
 
@@ -33,6 +27,8 @@ public class RegistrationController {
 
     @GetMapping
     public String showRegistrationForm(WebRequest request, Model model) {
+        if(UserService.isAuthenticated()) return "redirect:/";
+
         log.info("New User Registration Page Requested.");
 
         model.addAttribute("user", new UserRegistrationCommand());
@@ -40,6 +36,7 @@ public class RegistrationController {
         return "registration";
     }
 
+    @PreAuthorize("not isAuthenticated()")
     @PostMapping
     public String registerUserAccount(
             @Valid @ModelAttribute("user") UserRegistrationCommand user,
