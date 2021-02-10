@@ -8,7 +8,9 @@ import java.util.List;
 public interface TodoService {
     List<Todo> findAll();
     Todo findById(Long id);
-    Todo save(TodoCommand todoCommand);
+    Todo save(Todo todo);
+    Todo saveCommand(TodoCommand todoCommand);
     void deleteById(Long id);
     void done(Long id);
+    Todo assignUser(Long todoId, String username);
 }

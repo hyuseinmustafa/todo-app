@@ -20,7 +20,11 @@
         </form>
         <div class="float-right" >
             <p th:inline="text">Hi <span sec:authentication="name"></span></p>
-            <p th:inline="text">Roles <span th:text="${#authentication.principal.authorities}"></span></p>
+<!--            <p th:inline="text">Roles <span th:text="${#authentication.principal.authorities}"></span></p>-->
+            <p th:inline="text">Roles: <span  style="margin:3px;"
+                                             th:each="authority : ${#authentication.getAuthorities()}"
+                                             th:if="${authority.getAuthority().startsWith('ROLE_')}"
+                                             th:text="${authority.getAuthority().replaceFirst('ROLE_', '')}"></span></p>
         </div>
 
         <h1>Thymeleaf Fragments sample</h1>
