@@ -28,7 +28,7 @@ public class Privilege {
     private Collection<Role> roles;
 
     @Builder
-    public Privilege(Long id, @NotEmpty String name, Collection<Role> roles) {
+    public Privilege(Long id, String name, Collection<Role> roles) {
         this.id = id;
         this.name = name;
         this.roles = roles;

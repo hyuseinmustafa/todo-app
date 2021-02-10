@@ -34,7 +34,7 @@ public class Role {
     private Collection<Privilege> privileges;
 
     @Builder
-    public Role(Long id, @NotEmpty String name, Collection<User> users, Collection<Privilege> privileges) {
+    public Role(Long id, String name, Collection<User> users, Collection<Privilege> privileges) {
         this.id = id;
         this.name = name;
         this.users = users;
