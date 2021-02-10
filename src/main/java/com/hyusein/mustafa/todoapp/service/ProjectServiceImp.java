@@ -7,6 +7,7 @@ import com.hyusein.mustafa.todoapp.model.Project;
 import com.hyusein.mustafa.todoapp.repository.ProjectRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 @Slf4j
 @Service
 public class ProjectServiceImp implements ProjectService{
+
     private final ProjectRepository repository;
 
     public ProjectServiceImp(ProjectRepository repository) {
@@ -32,11 +34,13 @@ public class ProjectServiceImp implements ProjectService{
         return repository.findById(id).orElse(null);
     }
 
+    @Transactional
     @Override
     public Project save(ProjectCommand prj) {
         return repository.save(new ProjectCommandToProjectConverter().convert(prj));
     }
 
+    @Transactional
     @Override
     public void deleteById(Long id) {
         repository.deleteById(id);
