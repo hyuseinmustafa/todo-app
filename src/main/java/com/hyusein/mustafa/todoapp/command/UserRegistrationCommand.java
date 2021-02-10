@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -16,15 +17,19 @@ import javax.validation.constraints.NotBlank;
 public class UserRegistrationCommand {
     
     @NotBlank(message = "First Name must not be empty")
+    @Size(min = 2, max = 50, message = "First Name is too short ")
     private String firstName;
 
     @NotBlank(message = "Last Name must not be empty")
+    @Size(min = 2, max = 50, message = "Last Name is too short ")
     private String lastName;
 
     @NotBlank(message = "Username must not be empty")
+    @Size(min = 3, max = 50, message = "username is too short ")
     private String username;
 
     @NotBlank(message = "Password must not be empty")
+    @Size(min = 8, max = 50, message = "Password is too short ")
     private String password;
     private String matchingPassword;
 
