@@ -15,7 +15,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @Entity
 @Table(name = "user")
-public class User implements Serializable {
+public class User extends Auditable<String> implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,7 +43,9 @@ public class User implements Serializable {
     private Collection<Role> roles;
 
     @Builder
-    public User(Long id, @NotEmpty String username, @NotEmpty String password, String firstName, String lastName, boolean enabled, @NotEmpty String email, Collection<Role> roles) {
+    public User(Long id, String username, String password,
+                String firstName, String lastName,
+                boolean enabled, String email, Collection<Role> roles) {
         this.id = id;
         this.username = username;
         this.password = password;
