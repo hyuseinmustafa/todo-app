@@ -13,7 +13,7 @@ import java.util.function.Function;
 @NoArgsConstructor
 @Entity
 @Table(name = "todo")
-public class Todo extends Auditable<String> {
+public class Todo extends Auditable<String> implements Tool{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,8 +43,8 @@ public class Todo extends Auditable<String> {
         this.assignedUser = assignedUser;
     }
 
-    public Todo ifIdPresentRemediate(Function<? super Todo, ? extends Todo> source){
-        if(this.id != null) Tool.remediate(this, source.apply(this));
-        return this;
+    public Todo ifIdPresentRemediate(Function<Todo, Todo> source){
+        if(this.id == null) return null;
+        return Tool.remediate(this, source.apply(this));
     }
 }
