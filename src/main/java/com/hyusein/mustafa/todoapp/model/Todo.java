@@ -2,10 +2,8 @@ package com.hyusein.mustafa.todoapp.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.hyusein.mustafa.todoapp.ToDoStatus;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.hyusein.mustafa.todoapp.tool.Tool;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -14,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "todo")
-public class Todo extends Auditable<String> {
+public class Todo extends Auditable<String> implements Tool<Todo> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,11 +33,17 @@ public class Todo extends Auditable<String> {
     private User assignedUser;
 
     @Builder
-    public Todo(Long id, String headline, String description, ToDoStatus status, Project project) {
+    public Todo(Long id, String headline, String description, ToDoStatus status, Project project, User assignedUser) {
         this.id = id;
         this.headline = headline;
         this.description = description;
         this.status = status;
         this.project = project;
+        this.assignedUser = assignedUser;
+    }
+
+    @Override
+    public Todo andRemediate(Todo src) {
+        return remediate(this, src);
     }
 }

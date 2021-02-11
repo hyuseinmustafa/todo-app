@@ -18,51 +18,53 @@ import java.util.Optional;
 @Service
 public class TodoServiceImpl implements TodoService{
 
-    private final TodoRepository repository;
+    private final TodoRepository todoRepository;
     private final UserRepository userRepository;
 
-    public TodoServiceImpl(TodoRepository repository, UserRepository userRepository) {
-        this.repository = repository;
+    public TodoServiceImpl(TodoRepository todoRepository, UserRepository userRepository) {
+        this.todoRepository = todoRepository;
         this.userRepository = userRepository;
     }
 
     @Override
     public List<Todo> findAll() {
         List<Todo> list = new ArrayList<>();
-        repository.findAll().forEach(list::add);
+        todoRepository.findAll().forEach(list::add);
         return list;
     }
 
     @Override
     public Todo findById(Long id) {
-        return repository.findById(id).orElse(null);
+        return todoRepository.findById(id).orElse(null);
     }
 
     @Transactional
     @Override
     public Todo save(Todo todo) {
-        return repository.save(todo);
+        return todoRepository.save(todo);
     }
 
     @Override
     public Todo saveCommand(TodoCommand todoCommand) {
-        return save(new TodoCommandToTodoConverter().convert(todoCommand));
+        Todo todo = null;
+        if(todoCommand.getId() != null) todo = todoRepository.findById(todoCommand.getId()).orElse(null);
+        return save(new TodoCommandToTodoConverter().convert(todoCommand).andRemediate(todo));
     }
 
     @Transactional
     @Override
     public void deleteById(Long id) {
-        repository.deleteById(id);
+        todoRepository.deleteById(id);
     }
 
     @Transactional
     @Override
     public void done(Long id) {
-        Optional<Todo> todoOptional = repository.findById(id);
+        Optional<Todo> todoOptional = todoRepository.findById(id);
         if(todoOptional.isPresent()){
             Todo todo = todoOptional.get();
             todo.setStatus(ToDoStatus.FINISHED);
-            repository.save(todo);
+            todoRepository.save(todo);
         }
     }
 
