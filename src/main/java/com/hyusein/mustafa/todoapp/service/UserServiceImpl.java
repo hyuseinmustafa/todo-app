@@ -12,8 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -63,11 +64,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Set<String> findAllUsernames() {
-        Set<String> usernames = new HashSet<>();
-        userRepository.findAll().forEach(val -> usernames.add(val.getUsername()));
-        if(usernames.size() > 0)
-            return usernames;
-        return null;
+        return StreamSupport.stream(userRepository.findAll().spliterator(), false)
+                .map(User::getUsername).collect(Collectors.toSet());
     }
 
     private boolean emailExist(String email) {

@@ -21,14 +21,7 @@ class ToolTest {
         str1.val3 = new ArrayList();
         ToolTest str2 = new ToolTest();
 
-        Tool tool = new Tool() {
-            @Override
-            public Object andRemediate(Object src) {
-                return null;
-            }
-        };
-
-        tool.remediate(str2, str1);
+        Tool.remediate(str2, str1);
 
         assertEquals(str1.val1, str2.val1);
         assertEquals(str1.val2, str2.val2);

@@ -6,13 +6,14 @@ import com.hyusein.mustafa.todoapp.tool.Tool;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.function.Function;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "todo")
-public class Todo extends Auditable<String> implements Tool<Todo> {
+public class Todo extends Auditable<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,8 +43,8 @@ public class Todo extends Auditable<String> implements Tool<Todo> {
         this.assignedUser = assignedUser;
     }
 
-    @Override
-    public Todo andRemediate(Todo src) {
-        return remediate(this, src);
+    public Todo ifIdPresentRemediate(Function<? super Todo, ? extends Todo> source){
+        if(this.id != null) Tool.remediate(this, source.apply(this));
+        return this;
     }
 }

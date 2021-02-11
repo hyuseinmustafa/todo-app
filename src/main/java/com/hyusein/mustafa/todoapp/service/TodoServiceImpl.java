@@ -10,9 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Slf4j
 @Service
@@ -28,9 +28,7 @@ public class TodoServiceImpl implements TodoService{
 
     @Override
     public List<Todo> findAll() {
-        List<Todo> list = new ArrayList<>();
-        todoRepository.findAll().forEach(list::add);
-        return list;
+        return StreamSupport.stream(todoRepository.findAll().spliterator(), false).collect(Collectors.toList());
     }
 
     @Override
@@ -46,9 +44,8 @@ public class TodoServiceImpl implements TodoService{
 
     @Override
     public Todo saveCommand(TodoCommand todoCommand) {
-        Todo todo = null;
-        if(todoCommand.getId() != null) todo = todoRepository.findById(todoCommand.getId()).orElse(null);
-        return save(new TodoCommandToTodoConverter().convert(todoCommand).andRemediate(todo));
+        return save(new TodoCommandToTodoConverter().convert(todoCommand).ifIdPresentRemediate(todo ->
+                this.findById(todo.getId())));
     }
 
     @Transactional
@@ -60,12 +57,10 @@ public class TodoServiceImpl implements TodoService{
     @Transactional
     @Override
     public void done(Long id) {
-        Optional<Todo> todoOptional = todoRepository.findById(id);
-        if(todoOptional.isPresent()){
-            Todo todo = todoOptional.get();
+        todoRepository.findById(id).ifPresent(todo -> {
             todo.setStatus(ToDoStatus.FINISHED);
             todoRepository.save(todo);
-        }
+        });
     }
 
     @Transactional

@@ -1,7 +1,6 @@
 package com.hyusein.mustafa.todoapp.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.hyusein.mustafa.todoapp.tool.Tool;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,7 +11,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "project")
-public class Project extends Auditable<String> implements Tool<Project> {
+public class Project extends Auditable<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,10 +27,5 @@ public class Project extends Auditable<String> implements Tool<Project> {
         this.id = id;
         this.name = name;
         this.todos = todos;
-    }
-
-    @Override
-    public Project andRemediate(Project src) {
-        return remediate(this, src);
     }
 }

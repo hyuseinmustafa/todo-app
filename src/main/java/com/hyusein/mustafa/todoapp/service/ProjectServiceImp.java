@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Slf4j
 @Service
@@ -48,8 +50,7 @@ public class ProjectServiceImp implements ProjectService{
 
     @Override
     public List<ProjectCommand> findAllAsCommand() {
-        List<ProjectCommand> list = new ArrayList<>();
-        repository.findAll().forEach(val -> list.add(new ProjectToProjectCommandConverter().convert(val)));
-        return list;
+        return StreamSupport.stream(repository.findAll().spliterator(), false)
+                .map(new ProjectToProjectCommandConverter()::convert).collect(Collectors.toList());
     }
 }
