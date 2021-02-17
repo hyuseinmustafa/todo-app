@@ -29,6 +29,9 @@
                     <label for="description">Description</label>
                     <span class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">description Error</span>
                     <textarea class="form-control" rows="5" id="description" th:field="*{description}"></textarea>
+                    <label for="deadline">Deadline</label>
+                    <span class="text-danger" th:if="${#fields.hasErrors('deadline')}" th:errors="*{deadline}">deadline Error</span>
+                    <input type="date" class="form-control" id="deadline" th:field="*{deadline}"/>
                     <label for="status">Status</label>
                     <span class="text-danger" th:if="${#fields.hasErrors('status')}" th:errors="*{status}">status Error</span>
                     <select class="form-control" id="status" th:field="*{status}">
