@@ -68,6 +68,7 @@ class ProjectControllerTest {
     }
 
     @Test
+    @WithMockUser(authorities = {"CREATE_PROJECT"})
     void getNewProjectPage() throws Exception {
         mockMvc.perform(get("/project/new"))
                 .andExpect(status().isOk())
@@ -78,6 +79,7 @@ class ProjectControllerTest {
     }
 
     @Test
+    @WithMockUser(authorities = {"EDIT_PROJECT"})
     void getEditProjectPage() throws Exception {
         Project project = Project.builder().id(1L).name("test").build();
 
@@ -93,6 +95,7 @@ class ProjectControllerTest {
     }
 
     @Test
+    @WithMockUser(authorities = {"CREATE_PROJECT"})
     void saveNewProjectPage() throws Exception {
         Project project = Project.builder().id(1L).name("test").build();
 
@@ -108,6 +111,7 @@ class ProjectControllerTest {
     }
 
     @Test
+    @WithMockUser(authorities = {"DELETE_PROJECT"})
     void deleteProjectPage() throws Exception {
         mockMvc.perform(get("/project/1/delete"))
                 .andExpect(status().is3xxRedirection())
