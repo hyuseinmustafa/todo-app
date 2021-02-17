@@ -74,7 +74,8 @@ public class TodoController {
     @Transactional
     public String saveNewToDoPage(@Valid @ModelAttribute("neworedit_todo") TodoCommand todo, BindingResult result, Model model){
         if(result.hasErrors()){
-            log.debug("New ToDo page post Validation error.");
+            log.error("New ToDo page post Validation error.");
+            result.getAllErrors().stream().forEach(objectError -> log.error(objectError.toString()));
 
             model.addAttribute("project_list", projectService.findAllAsCommand());
 
@@ -83,7 +84,7 @@ public class TodoController {
 
         Todo savedTodo = todoService.saveCommand(todo);
 
-        log.debug("ToDo saved id: " + savedTodo.getId());
+        log.error("ToDo saved id: " + savedTodo.getId());
 
         return "redirect:/";
     }

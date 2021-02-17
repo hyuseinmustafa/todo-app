@@ -16,6 +16,7 @@ public class TodoCommandToTodoConverter implements Converter<TodoCommand, Todo> 
         target.setHeadline(source.getHeadline());
         target.setDescription(source.getDescription());
         target.setStatus(source.getStatus());
+        target.setDeadline(source.getDeadline());
         target.setProject(new ProjectCommandToProjectConverter().convert(source.getProject()));
         return target;
     }

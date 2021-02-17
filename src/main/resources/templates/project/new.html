@@ -20,6 +20,9 @@
                     <label for="name">Name</label>
                     <span class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">name Error</span>
                     <input type="text" class="form-control" id="name" th:field="*{name}"/>
+                    <label for="deadline">Deadline</label>
+                    <span class="text-danger" th:if="${#fields.hasErrors('deadline')}" th:errors="*{deadline}">dadline Error</span>
+                    <input type="date" class="form-control" id="deadline" th:field="*{deadline}"/>
                 </div>
                 <button type="submit" class="btn btn-primary">Save</button>
             </form>

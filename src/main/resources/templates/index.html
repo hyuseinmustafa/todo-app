@@ -26,6 +26,7 @@
                         <th>Headline</th>
                         <th>Description</th>
                         <th>Assigned User</th>
+                        <th>Deadline</th>
                         <th>Status</th>
                         <th></th>
                         <th></th>
@@ -39,6 +40,7 @@
                         <td th:text="${todo.headline}">Thing</td>
                         <td th:text="${todo.description}">Do this</td>
                         <td th:text="${todo.assignedUser?.username}">Assigned User</td>
+                        <td th:text="${#dates.format(todo.deadline, 'dd/MM/yyyy')}">Deadline</td>
                         <td th:text="${todo.status}">Waiting</td>
                         <td>
                             <a class="btn-sm btn-primary float-right" href="#" role="button"

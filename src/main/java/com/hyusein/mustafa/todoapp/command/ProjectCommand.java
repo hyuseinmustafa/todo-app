@@ -4,9 +4,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 @Setter
 @Getter
@@ -18,6 +20,9 @@ public class ProjectCommand {
     @NotBlank
     @Size(min = 3, max = 20)
     private String name;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date deadline;
 
     @Builder
     public ProjectCommand(Long id, String name) {
