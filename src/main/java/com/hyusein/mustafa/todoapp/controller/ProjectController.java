@@ -5,6 +5,7 @@ import com.hyusein.mustafa.todoapp.converter.ProjectToProjectCommandConverter;
 import com.hyusein.mustafa.todoapp.model.Project;
 import com.hyusein.mustafa.todoapp.service.ProjectService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,6 +33,7 @@ public class ProjectController {
         return "project/list";
     }
 
+    @PreAuthorize("hasAuthority('CREATE_PROJECT')")
     @GetMapping("/new")
     public String getNewProjectPage(Model model) {
         log.debug("New Projects Page Requested.");
@@ -41,17 +43,22 @@ public class ProjectController {
         return "project/new";
     }
 
+    @PreAuthorize("hasAuthority('EDIT_PROJECT')")
     @GetMapping("/{id}/edit")
     public String getEditProjectPage(@PathVariable("id") Long id, Model model){
         log.debug("Edit Project Page Requested.");
 
-        model.addAttribute("neworedit_project", new ProjectToProjectCommandConverter().convert(projectService.findById(id)));
+        model.addAttribute("neworedit_project",
+                new ProjectToProjectCommandConverter().convert(projectService.findById(id)));
 
         return "project/new";
     }
 
+    @PreAuthorize("(hasAuthority('EDIT_PROJECT') and #project.id != null) or" +
+            " (hasAuthority('CREATE_PROJECT') and #project.id == null)")
     @PostMapping({"/save"})
-    public String saveNewProjectPage(@Valid @ModelAttribute("neworedit_project") ProjectCommand project, BindingResult result) {
+    public String saveNewProjectPage(@Valid @ModelAttribute("neworedit_project") ProjectCommand project,
+                                     BindingResult result) {
         if (result.hasErrors()) {
             log.debug("New Project page post Validation error.");
 
@@ -65,6 +72,7 @@ public class ProjectController {
         return "redirect:/project";
     }
 
+    @PreAuthorize("hasAuthority('DELETE_PROJECT')")
     @GetMapping("/{id}/delete")
     public String deleteProjectPage(@PathVariable("id") Long id){
         projectService.deleteById(id);

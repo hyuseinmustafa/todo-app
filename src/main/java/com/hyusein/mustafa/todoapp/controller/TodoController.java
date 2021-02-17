@@ -38,7 +38,7 @@ public class TodoController {
         //dataBinder.setDisallowedFields("id");
     }
 
-    @PreAuthorize("hasAuthority('CREATE')")
+    @PreAuthorize("hasAuthority('CREATE_TODO')")
     @GetMapping({"/new"})
     public String getNewToDoPage(Model model){
         log.debug("Add new ToDo Page Requested.");
@@ -49,7 +49,7 @@ public class TodoController {
         return "todo/new";
     }
 
-    @PreAuthorize("hasAuthority('EDIT')")
+    @PreAuthorize("hasAuthority('EDIT_TODO')")
     @GetMapping("/{id}/edit")
     public String getEditToDoPage(@PathVariable("id") Long id, Model model){
         log.debug("Edit Todo.");
@@ -69,7 +69,7 @@ public class TodoController {
         return "redirect:/";
     }
 
-    @PreAuthorize("(hasAuthority('EDIT') and #todo.id != null) or (hasAuthority('CREATE') and #todo.id == null)")
+    @PreAuthorize("(hasAuthority('EDIT_TODO') and #todo.id != null) or (hasAuthority('CREATE_TODO') and #todo.id == null)")
     @PostMapping({"/save"})
     @Transactional
     public String saveNewToDoPage(@Valid @ModelAttribute("neworedit_todo") TodoCommand todo, BindingResult result, Model model){
@@ -88,7 +88,7 @@ public class TodoController {
         return "redirect:/";
     }
 
-    @PreAuthorize("hasAuthority('DELETE')")
+    @PreAuthorize("hasAuthority('DELETE_TODO')")
     @GetMapping("/{id}/delete")
     public String deleteToDoPage(@PathVariable("id") Long id){
         log.debug("ToDo delete. id: " + id);
@@ -98,7 +98,7 @@ public class TodoController {
         return "redirect:/";
     }
 
-    @PreAuthorize("hasAuthority('ASSIGN')")
+    @PreAuthorize("hasAuthority('ASSIGN_USER')")
     @GetMapping("/{id}/assign")
     public String assignUserPageRequest(@PathVariable("id") Long id, Model model){
         log.debug("Todo assign page requested. id: " + id);
@@ -111,7 +111,7 @@ public class TodoController {
         return "todo/assign";
     }
 
-    @PreAuthorize("hasAuthority('ASSIGN')")
+    @PreAuthorize("hasAuthority('ASSIGN_USER')")
     @PostMapping("/assign")
     public String assignUserPageSave(@Valid @ModelAttribute("assignCommand") AssignCommand assignCommand){
         log.debug("assignUserPageSave. id: " + assignCommand.getTodoId());

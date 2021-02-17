@@ -14,7 +14,7 @@
         <div class="col">
             <a class="btn btn-primary" href="#" role="button"
                th:href="@{/todo/new}"
-               th:if= "${#authorization.expression('hasAuthority(''CREATE'')')}">New</a>
+               th:if= "${#authorization.expression('hasAuthority(''CREATE_TODO'')')}">New</a>
         </div>
     </div>
     <div class="row" th:if= "${not #lists.isEmpty(todo_list)}">
@@ -45,23 +45,23 @@
                                th:href="@{'/todo/'+ ${todo.id} +'/done'}"
                                th:if= "${todo.status.name == 'WAITING' and
                                 (todo.assignedUser?.username == #authentication.name or
-                                #authorization.expression('hasAuthority(''FINISH'')'))}">Finish</a>
+                                #authorization.expression('hasAuthority(''FINISH_TODO'')'))}">Finish</a>
                         </td>
                         <td>
                             <a class="btn-sm btn-primary float-right" href="#" role="button"
                                th:href="@{'/todo/'+ ${todo.id} +'/assign'}"
                                th:if= "${todo.status.name == 'WAITING' and
-                               #authorization.expression('hasAuthority(''ASSIGN'')')}">Assign</a>
+                               #authorization.expression('hasAuthority(''ASSIGN_USER'')')}">Assign</a>
                         </td>
                         <td>
                             <a class="btn-sm btn-primary float-right" href="#" role="button"
                                th:href="@{'/todo/'+ ${todo.id} +'/edit'}"
-                               th:if= "${#authorization.expression('hasAuthority(''EDIT'')')}">Edit</a>
+                               th:if= "${#authorization.expression('hasAuthority(''EDIT_TODO'')')}">Edit</a>
                         </td>
                         <td>
                             <a class="btn-sm btn-primary float-right" href="#" role="button"
                                th:href="@{'/todo/'+ ${todo.id} +'/delete'}"
-                               th:if= "${#authorization.expression('hasAuthority(''DELETE'')')}">Delete</a>
+                               th:if= "${#authorization.expression('hasAuthority(''DELETE_TODO'')')}">Delete</a>
                         </td>
                     </tr>
                 </tbody>

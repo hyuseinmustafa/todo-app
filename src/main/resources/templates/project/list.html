@@ -12,7 +12,9 @@
 
     <div class="row">
         <div class="col">
-            <a class="btn btn-primary" href="#" role="button"  th:href="@{/project/new}">New</a>
+            <a class="btn btn-primary" href="#" role="button"
+               th:href="@{/project/new}"
+               th:if= "${#authorization.expression('hasAuthority(''CREATE_PROJECT'')')}">New</a>
         </div>
     </div>
     <div class="row" th:if= "${not #lists.isEmpty(project_list)}">
@@ -31,8 +33,12 @@
                     <td th:text="${project.todos.size}">size</td>
                     </td>
                     <td>
-                        <a class="btn-sm btn-primary float-right" href="#" role="button" th:href="@{'/project/'+ ${project.id} +'/delete'}">Delete</a>
-                        <a class="btn-sm btn-primary float-right" href="#" role="button" th:href="@{'/project/'+ ${project.id} +'/edit'}">Edit</a>
+                        <a class="btn-sm btn-primary float-right" href="#" role="button"
+                           th:href="@{'/project/'+ ${project.id} +'/delete'}"
+                           th:if= "${#authorization.expression('hasAuthority(''DELETE_PROJECT'')')}">Delete</a>
+                        <a class="btn-sm btn-primary float-right" href="#" role="button"
+                           th:href="@{'/project/'+ ${project.id} +'/edit'}"
+                           th:if= "${#authorization.expression('hasAuthority(''EDIT_PROJECT'')')}">Edit</a>
                     </td>
                 </tr>
                 </tbody>

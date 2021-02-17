@@ -58,7 +58,7 @@ class TodoControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = {"CREATE"})
+    @WithMockUser(authorities = {"CREATE_TODO"})
     void getNewToDoPage() throws Exception {
         List<ProjectCommand> list = new ArrayList<>();
         list.add(ProjectCommand.builder().id(1L).name("test").build());
@@ -74,7 +74,7 @@ class TodoControllerTest {
         verifyNoInteractions(todoService);
     }
     @Test
-    @WithMockUser(authorities = {"EDIT"})
+    @WithMockUser(authorities = {"EDIT_TODO"})
     void getEditToDoPage() throws Exception {
         Project project =  Project.builder().id(1L).name("test").build();
         Todo todo = Todo.builder()
@@ -128,7 +128,7 @@ class TodoControllerTest {
     *
      */
     @Test
-    @WithMockUser(authorities = {"EDIT"})
+    @WithMockUser(authorities = {"EDIT_TODO"})
     void saveNewToDoPage() throws Exception {
         Todo todo = Todo.builder()
                 .id(1L)
@@ -158,7 +158,7 @@ class TodoControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = {"DELETE"})
+    @WithMockUser(authorities = {"DELETE_TODO"})
     void deleteToDoPage() throws Exception {
         mockMvc.perform(get("/todo/1/delete"))
                 .andExpect(status().is3xxRedirection())
