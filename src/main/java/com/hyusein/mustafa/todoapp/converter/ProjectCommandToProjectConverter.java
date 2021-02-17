@@ -14,6 +14,7 @@ public class ProjectCommandToProjectConverter implements Converter<ProjectComman
         Project target = new Project();
         target.setId(source.getId());
         target.setName(source.getName());
+        target.setDeadline(source.getDeadline());
         return target;
     }
 }

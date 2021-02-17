@@ -21,6 +21,7 @@
                 <thead>
                 <tr>
                     <th>Name</th>
+                    <th>Deadline</th>
                     <th>Number of Todos</th>
                     <th></th>
                 </tr>
@@ -28,6 +29,7 @@
                 <tbody>
                 <tr th:each="project: ${project_list}">
                     <td th:text="${project.name}">name</td>
+                    <td th:text="${#dates.format(project.deadline, 'dd/MM/yyyy')}">deadline</td>
                     <td th:text="${project.todos.size}">size</td>
                     </td>
                     <td>

@@ -2,8 +2,10 @@ package com.hyusein.mustafa.todoapp.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Set;
 
 @Setter
@@ -17,6 +19,7 @@ public class Project extends Auditable<String> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private Date deadline;
 
     @JsonBackReference
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
