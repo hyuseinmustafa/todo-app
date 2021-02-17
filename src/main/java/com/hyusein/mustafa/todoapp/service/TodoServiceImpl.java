@@ -6,6 +6,7 @@ import com.hyusein.mustafa.todoapp.converter.TodoCommandToTodoConverter;
 import com.hyusein.mustafa.todoapp.model.Todo;
 import com.hyusein.mustafa.todoapp.repository.TodoRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -58,21 +59,20 @@ public class TodoServiceImpl implements TodoService{
     @Transactional
     @Override
     public void done(Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         todoRepository.findById(id)
                 .filter(val -> {
-                    if(SecurityContextHolder.getContext().getAuthentication().getAuthorities()
-                            .stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList())
-                            .contains("FINISH_TODO")) return true;
-                    if(val.getAssignedUser() != null) if(val.getAssignedUser().getUsername().equals(
-                            SecurityContextHolder.getContext().getAuthentication().getName()
-                    )) return true;
+                    if(authentication.getAuthorities().stream()
+                            .map(GrantedAuthority::getAuthority).anyMatch("FINISH_TODO"::equals)) return true;
+                    if(val.getAssignedUser() != null)
+                        if(val.getAssignedUser().getUsername().equals(
+                                authentication.getName()
+                        )) return true;
                     return false;
                 })
                 .ifPresent(todo -> {
                     todo.setStatus(ToDoStatus.FINISHED);
-                    todo.setDoneBy(userService.findByUsername(
-                            SecurityContextHolder.getContext().getAuthentication().getName()
-                    ));
+                    todo.setDoneBy(userService.findByUsername(authentication.getName()));
                     todoRepository.save(todo);
                 });
     }
