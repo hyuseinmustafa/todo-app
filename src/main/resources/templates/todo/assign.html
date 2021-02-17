@@ -17,7 +17,7 @@
                     <input type="hidden" th:field="*{todoId}"/>
                     <label for="user">User</label>
                     <select class="form-control" id="user" th:field="*{assignedUser}">
-                        <option value="" hidden></option>
+                        <option value="">...</option>
                         <option th:each="user : *{userList}"
                                 th:value="${user}" th:text="${user}">options</option>
                     </select>

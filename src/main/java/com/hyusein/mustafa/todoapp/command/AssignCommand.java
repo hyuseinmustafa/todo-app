@@ -2,7 +2,6 @@ package com.hyusein.mustafa.todoapp.command;
 
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,7 +14,7 @@ public class AssignCommand {
 
     @NotNull
     private Long todoId;
-    @NotBlank
+    @NotNull
     private String assignedUser;
     private Set<String> userList = new HashSet<>();
 
