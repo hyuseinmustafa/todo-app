@@ -12,6 +12,8 @@ import java.util.Set;
 public interface UserService {
     User registerNewUserAccount(UserRegistrationCommand userDto) throws UserAlreadyExistException;
     Set<String> findAllUsernames();
+    User findByUsername(String username);
+    User findByEmail(String email);
 
     /*
      * This method checks is user logged in

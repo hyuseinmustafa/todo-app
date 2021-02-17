@@ -5,8 +5,9 @@ import com.hyusein.mustafa.todoapp.command.TodoCommand;
 import com.hyusein.mustafa.todoapp.converter.TodoCommandToTodoConverter;
 import com.hyusein.mustafa.todoapp.model.Todo;
 import com.hyusein.mustafa.todoapp.repository.TodoRepository;
-import com.hyusein.mustafa.todoapp.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,11 +20,11 @@ import java.util.stream.StreamSupport;
 public class TodoServiceImpl implements TodoService{
 
     private final TodoRepository todoRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public TodoServiceImpl(TodoRepository todoRepository, UserRepository userRepository) {
+    public TodoServiceImpl(TodoRepository todoRepository, UserService userService) {
         this.todoRepository = todoRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     @Override
@@ -57,10 +58,23 @@ public class TodoServiceImpl implements TodoService{
     @Transactional
     @Override
     public void done(Long id) {
-        todoRepository.findById(id).ifPresent(todo -> {
-            todo.setStatus(ToDoStatus.FINISHED);
-            todoRepository.save(todo);
-        });
+        todoRepository.findById(id)
+                .filter(val -> {
+                    if(SecurityContextHolder.getContext().getAuthentication().getAuthorities()
+                            .stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList())
+                            .contains("FINISH_TODO")) return true;
+                    if(val.getAssignedUser() != null) if(val.getAssignedUser().getUsername().equals(
+                            SecurityContextHolder.getContext().getAuthentication().getName()
+                    )) return true;
+                    return false;
+                })
+                .ifPresent(todo -> {
+                    todo.setStatus(ToDoStatus.FINISHED);
+                    todo.setDoneBy(userService.findByUsername(
+                            SecurityContextHolder.getContext().getAuthentication().getName()
+                    ));
+                    todoRepository.save(todo);
+                });
     }
 
     @Transactional
@@ -69,7 +83,7 @@ public class TodoServiceImpl implements TodoService{
         Todo todo = findById(todoId);
         if(todo != null) {
             if(todo.getStatus() != ToDoStatus.FINISHED) {
-                todo.setAssignedUser(userRepository.findByUsername(username));
+                todo.setAssignedUser(userService.findByUsername(username));
                 return save(todo);
             }
         }

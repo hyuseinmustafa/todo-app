@@ -36,6 +36,10 @@ public class Todo extends Auditable<String> implements Tool{
     @JoinColumn(name = "assigned_user_id")
     private User assignedUser;
 
+    @ManyToOne
+    @JoinColumn(name = "done_by_user_id")
+    private User doneBy;
+
     private Date deadline;
 
     @Builder

@@ -30,6 +30,16 @@ public class UserServiceImpl implements UserService {
         this.roleRepository = roleRepository;
     }
 
+    @Override
+    public User findByUsername(String username) {
+        return this.userRepository.findByUsername(username);
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        return this.userRepository.findByEmail(email);
+    }
+
     @Transactional
     @Override
     public User registerNewUserAccount(UserRegistrationCommand user) throws UserAlreadyExistException {

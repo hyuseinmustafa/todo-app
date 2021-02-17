@@ -6,7 +6,6 @@ import com.hyusein.mustafa.todoapp.command.TodoCommand;
 import com.hyusein.mustafa.todoapp.model.Project;
 import com.hyusein.mustafa.todoapp.model.Todo;
 import com.hyusein.mustafa.todoapp.repository.TodoRepository;
-import com.hyusein.mustafa.todoapp.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,13 +28,13 @@ class TodoServiceTest {
     TodoRepository todoRepository;
 
     @Mock
-    UserRepository userRepository;
+    UserService userService;
 
     TodoService todoService;
 
     @BeforeEach
     void setUp() {
-        todoService = new TodoServiceImpl(todoRepository, userRepository);
+        todoService = new TodoServiceImpl(todoRepository, userService);
     }
 
     @Test
