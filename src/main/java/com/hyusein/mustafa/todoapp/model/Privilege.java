@@ -8,6 +8,8 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -25,10 +27,10 @@ public class Privilege {
     private String name;
 
     @ManyToMany(mappedBy = "privileges")
-    private Collection<Role> roles;
+    private Set<Role> roles;
 
     @Builder
-    public Privilege(Long id, String name, Collection<Role> roles) {
+    public Privilege(Long id, String name, Set<Role> roles) {
         this.id = id;
         this.name = name;
         this.roles = roles;
