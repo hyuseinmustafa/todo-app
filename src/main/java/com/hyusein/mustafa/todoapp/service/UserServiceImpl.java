@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -76,6 +77,15 @@ public class UserServiceImpl implements UserService {
     public Set<String> findAllUsernames() {
         return StreamSupport.stream(userRepository.findAll().spliterator(), false)
                 .map(User::getUsername).collect(Collectors.toSet());
+    }
+
+    @Override
+    public void saveUserRole(String username, Collection<Role> roles) {
+        User userFound = this.findByUsername(username);
+        if(userFound != null){
+            userFound.setRoles(roles);
+            this.userRepository.save(userFound);
+        }
     }
 
     private boolean emailExist(String email) {

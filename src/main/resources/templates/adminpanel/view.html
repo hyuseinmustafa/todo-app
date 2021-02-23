@@ -31,8 +31,30 @@
                     <span th:if="${#lists.contains(rrr.privileges, privilege)}">&#9989;</span>
                     <span th:if="${not #lists.contains(rrr.privileges, privilege)}">&#10060;</span>
                 </div>
-                <a class="btn btn-warning" th:href="@{'/admin/' + ${rrr.id}}">Edit</a>
+                <a class="btn btn-warning" th:href="@{'/admin/role/' + ${rrr.id}}">Edit</a>
             </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">
+            <form action="#" th:action="@{/admin/user}" method="get">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="username" th:value="${user?.username}"/>
+                <button type="submit" class="btn btn-warning">Find User</button>
+            </form>
+        </div>
+        <div class="col mt-5" th:if="not ${user == null}">
+            <form action="#" th:action="@{/admin/user/save}" method="post" th:object="${user}">
+                <input type="hidden" th:value="${user.username}" th:field="*{username}">
+                <div th:each="role : ${allRoles}" >
+                    <input type="checkbox"
+                           th:text="${#strings.replace(role.name, 'ROLE_', '')}"
+                           th:field="*{roles}"
+                           th:value="${role.id}"/>
+                </div>
+                <a class="btn btn-success" th:href="@{/admin}">Cancel</a>
+                <button type="submit" class="btn btn-danger">Save</button>
+            </form>
         </div>
     </div>
 </div>
