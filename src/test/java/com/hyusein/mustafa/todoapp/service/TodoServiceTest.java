@@ -12,11 +12,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithMockUser;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -35,6 +39,7 @@ class TodoServiceTest {
     @BeforeEach
     void setUp() {
         todoService = new TodoServiceImpl(todoRepository, userService);
+
     }
 
     @Test
@@ -129,7 +134,15 @@ class TodoServiceTest {
     }
 
     @Test
+    @WithMockUser(authorities = {"CREATE_PROJECT"})
     void done() {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("FINISH_TODO"));
+        Authentication authentication = new UsernamePasswordAuthenticationToken("asd","asd",authorities);
+        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+
         Optional<Todo> todo = Optional.ofNullable(
                 Todo.builder()
                         .id(1L)
