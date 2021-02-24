@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Title</title>
+    <!--/*/ <th:block th:include="fragments/general.html :: headerfiles">
+            </th:block> /*/-->
+</head>
+<body>
+<div class="container p-3 my-3 bg-dark text-white">
+    <header th:insert="fragments/general.html :: header"> </header>
+    <div th:replace="fragments/general.html :: footer"></div>
+
+    <div class="row">
+        <div class="col">
+            <div>-X-</div>
+            <div th:each="privilege: ${allPrivileges}" th:text="${#strings.replace(privilege.name, '_', ' ')}">X</div>
+        </div>
+        <div class="col" th:each="rrr : ${allRoles}">
+            <form th:if="${role?.id == rrr.id}" action="#" th:action="@{'/admin/save/' + ${role?.id}}" th:object="${role}" method="post">
+                <input type="hidden" th:field="*{name}" th:value="*{name}"/>
+                <div th:text="${#strings.replace(rrr.name, 'ROLE_', '')}">Role</div>
+                <div th:each="privilege: ${allPrivileges}">
+                    <input type="checkbox" th:field="*{privileges}" th:value="${privilege.id}"/>
+                </div>
+                <a class="btn btn-success" th:href="@{/admin}">Cancel</a>
+                <button type="submit" class="btn btn-danger">Save</button>
+            </form>
+            <div th:if="not ${role?.id == rrr.id}">
+                <div th:text="${#strings.replace(rrr.name, 'ROLE_', '')}">Role</div>
+                <div th:each="privilege: ${allPrivileges}">
+                    <span th:if="${#lists.contains(rrr.privileges, privilege)}">&#9989;</span>
+                    <span th:if="${not #lists.contains(rrr.privileges, privilege)}">&#10060;</span>
+                </div>
+                <a class="btn btn-warning" th:href="@{'/admin/role/' + ${rrr.id}}">Edit</a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">
+            <form action="#" th:action="@{/admin/user}" method="get">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" name="username" th:value="${user?.username}"/>
+                <button type="submit" class="btn btn-warning">Find User</button>
+            </form>
+        </div>
+        <div class="col mt-5" th:if="not ${user == null}">
+            <form action="#" th:action="@{/admin/user/save}" method="post" th:object="${user}">
+                <input type="hidden" th:value="${user.username}" th:field="*{username}">
+                <div th:each="role : ${allRoles}" >
+                    <input type="checkbox"
+                           th:text="${#strings.replace(role.name, 'ROLE_', '')}"
+                           th:field="*{roles}"
+                           th:value="${role.id}"/>
+                </div>
+                <a class="btn btn-success" th:href="@{/admin}">Cancel</a>
+                <button type="submit" class="btn btn-danger">Save</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

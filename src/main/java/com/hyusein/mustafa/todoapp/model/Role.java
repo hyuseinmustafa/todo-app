@@ -8,6 +8,9 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -31,10 +34,10 @@ public class Role {
     @JoinTable(name = "roles_privileges",
             joinColumns = {@JoinColumn(name = "role_id")},
             inverseJoinColumns = {@JoinColumn(name = "privilege_id")})
-    private Collection<Privilege> privileges;
+    private Set<Privilege> privileges;
 
     @Builder
-    public Role(Long id, String name, Collection<User> users, Collection<Privilege> privileges) {
+    public Role(Long id, String name, Collection<User> users, Set<Privilege> privileges) {
         this.id = id;
         this.name = name;
         this.users = users;

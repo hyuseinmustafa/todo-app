@@ -44,6 +44,9 @@
                 <li class="nav-item" th:classappend="${#strings.startsWith(view,'/project')? 'active' : ''}"}>
                     <a class="nav-link" href="#" th:href="@{'/project'}">Projects</a>
                 </li>
+                <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item" th:classappend="${#strings.startsWith(view,'/admin')? 'active' : ''}"}>
+                    <a class="nav-link" href="#" th:href="@{'/admin'}">Admin Panel</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link disabled" href="#">Disabled</a>
                 </li>
