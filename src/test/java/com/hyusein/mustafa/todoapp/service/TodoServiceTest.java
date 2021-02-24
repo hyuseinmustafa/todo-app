@@ -5,6 +5,7 @@ import com.hyusein.mustafa.todoapp.command.ProjectCommand;
 import com.hyusein.mustafa.todoapp.command.TodoCommand;
 import com.hyusein.mustafa.todoapp.model.Project;
 import com.hyusein.mustafa.todoapp.model.Todo;
+import com.hyusein.mustafa.todoapp.model.User;
 import com.hyusein.mustafa.todoapp.repository.TodoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -95,8 +96,9 @@ class TodoServiceTest {
     }
 
     @Test
-    void save() {
+    void saveCommand() {
         TodoCommand todoCommand = TodoCommand.builder()
+                .id(1L)
                 .headline("headline1")
                 .description("description1")
                 .status(ToDoStatus.FINISHED)
@@ -134,8 +136,7 @@ class TodoServiceTest {
     }
 
     @Test
-    @WithMockUser(authorities = {"CREATE_PROJECT"})
-    void done() {
+    void doneByAuthority() {
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("FINISH_TODO"));
         Authentication authentication = new UsernamePasswordAuthenticationToken("asd","asd",authorities);
@@ -160,5 +161,90 @@ class TodoServiceTest {
 
         verify(todoRepository, times(1)).findById(Mockito.anyLong());
         verify(todoRepository, times(1)).save(Mockito.any());
+    }
+
+    @Test
+    void doneByUser() {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        Authentication authentication = new UsernamePasswordAuthenticationToken("asd","asd",authorities);
+        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+
+        Optional<Todo> todo = Optional.ofNullable(
+                Todo.builder()
+                        .id(1L)
+                        .headline("headline")
+                        .description("description")
+                        .status(ToDoStatus.WAITING)
+                        .project(Project.builder().id(2L).name("name").build())
+                        .assignedUser(User.builder().username("asd").build())
+                        .build()
+        );
+
+        when(todoRepository.findById(Mockito.anyLong())).thenReturn(todo);
+        when(todoRepository.save(Mockito.any())).thenReturn(todo.get());
+
+        todoService.done(1L);
+
+        verify(todoRepository, times(1)).findById(Mockito.anyLong());
+        verify(todoRepository, times(1)).save(Mockito.any());
+    }
+
+    @Test
+    void doneFailure() {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        Authentication authentication = new UsernamePasswordAuthenticationToken("asd","asd",authorities);
+        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+
+        Optional<Todo> todo = Optional.ofNullable(
+                Todo.builder()
+                        .id(1L)
+                        .headline("headline")
+                        .description("description")
+                        .status(ToDoStatus.WAITING)
+                        .project(Project.builder().id(2L).name("name").build())
+                        .build()
+        );
+
+        when(todoRepository.findById(Mockito.anyLong())).thenReturn(todo);
+
+        todoService.done(1L);
+
+        verify(todoRepository, times(1)).findById(Mockito.anyLong());
+        verify(todoRepository, times(0)).save(Mockito.any());
+    }
+
+    @Test
+    void assignUser() {
+        Optional<Todo> todo = Optional.ofNullable(
+                Todo.builder()
+                        .id(1L)
+                        .headline("headline")
+                        .description("description")
+                        .status(ToDoStatus.WAITING)
+                        .project(Project.builder().id(2L).name("name").build())
+                        .build()
+        );
+
+        when(todoRepository.findById(Mockito.anyLong())).thenReturn(Optional.empty());
+        when(todoRepository.save(Mockito.any())).thenReturn(todo.get());
+
+        todoService.assignUser(1L, "asd");
+
+        when(todoRepository.findById(Mockito.anyLong())).thenReturn(todo);
+
+        todoService.assignUser(1L, "asd");
+
+        todo.get().setStatus(ToDoStatus.FINISHED);
+        when(todoRepository.findById(Mockito.anyLong())).thenReturn(todo);
+
+        todoService.assignUser(1L, "asd");
+
+        verify(todoRepository, times(3)).findById(Mockito.anyLong());
+        verify(todoRepository, times(1)).save(Mockito.any());
+
     }
 }

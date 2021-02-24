@@ -114,7 +114,7 @@ public class TodoController {
 
     @PreAuthorize("hasAuthority('ASSIGN_USER')")
     @PostMapping("/assign")
-    public String assignUserPageSave(@Valid @ModelAttribute("assignCommand") AssignCommand assignCommand){
+    public String assignUserPageSave(@ModelAttribute("assignCommand") AssignCommand assignCommand){
         log.debug("assignUserPageSave. id: " + assignCommand.getTodoId());
 
         Todo todo = todoService.assignUser(assignCommand.getTodoId(), assignCommand.getAssignedUser());

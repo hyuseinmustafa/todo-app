@@ -1,6 +1,7 @@
 package com.hyusein.mustafa.todoapp.controller;
 
 import com.hyusein.mustafa.todoapp.ToDoStatus;
+import com.hyusein.mustafa.todoapp.command.AssignCommand;
 import com.hyusein.mustafa.todoapp.command.ProjectCommand;
 import com.hyusein.mustafa.todoapp.command.TodoCommand;
 import com.hyusein.mustafa.todoapp.model.Project;
@@ -128,7 +129,7 @@ class TodoControllerTest {
     *
      */
     @Test
-    @WithMockUser(authorities = {"EDIT_TODO"})
+    @WithMockUser(authorities = {"EDIT_TODO", "CREATE_TODO"})
     void saveNewToDoPage() throws Exception {
         Todo todo = Todo.builder()
                 .id(1L)
@@ -148,6 +149,12 @@ class TodoControllerTest {
 
         when(todoService.saveCommand(Mockito.any())).thenReturn(todo);
 
+        mockMvc.perform(MockMvcRequestBuilderUtils.postForm("/todo/save", null)
+                .sessionAttr(TOKEN_ATTR_NAME, csrfToken)
+                .param(csrfToken.getParameterName(), csrfToken.getToken()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("todo/new"));
+
         mockMvc.perform(MockMvcRequestBuilderUtils.postForm("/todo/save", todoCommand)
                 .sessionAttr(TOKEN_ATTR_NAME, csrfToken)
                 .param(csrfToken.getParameterName(), csrfToken.getToken()))
@@ -165,5 +172,43 @@ class TodoControllerTest {
                 .andExpect(view().name("redirect:/"));
 
         verify(todoService, times(1)).deleteById(Mockito.anyLong());
+    }
+
+    @Test
+    @WithMockUser(authorities = {"ASSIGN_USER"})
+    void assignUserPageRequest() throws Exception {
+        mockMvc.perform(get("/todo/1/assign"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("assignCommand"))
+                .andExpect(view().name("todo/assign"));
+    }
+
+    @Test
+    @WithMockUser(authorities = {"ASSIGN_USER"})
+    void assignUserPageSave() throws Exception {
+        Todo todo = Todo.builder()
+                .id(1L)
+                .headline("headline")
+                .description("")
+                .status(ToDoStatus.WAITING)
+                .project(Project.builder().id(2L).name("name").build())
+                .build();
+
+        when(todoService.assignUser(Mockito.anyLong(), Mockito.anyString())).thenReturn(todo);
+
+        mockMvc.perform(MockMvcRequestBuilderUtils.postForm("/todo/assign", AssignCommand.builder().build())
+                .sessionAttr(TOKEN_ATTR_NAME, csrfToken)
+                .param(csrfToken.getParameterName(), csrfToken.getToken()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("todo/assign"));
+
+        mockMvc.perform(MockMvcRequestBuilderUtils.postForm("/todo/assign",
+                        AssignCommand.builder().todoId(1L).assignedUser("test user").build())
+                .sessionAttr(TOKEN_ATTR_NAME, csrfToken)
+                .param(csrfToken.getParameterName(), csrfToken.getToken()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/"));
+
+        verify(todoService, times(1)).assignUser(Mockito.anyLong(), Mockito.anyString());
     }
 }

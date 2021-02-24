@@ -98,6 +98,13 @@ class ProjectControllerTest {
 
         when(service.save(Mockito.any())).thenReturn(project);
 
+        //check validation
+        mockMvc.perform(post("/project/save")
+                .sessionAttr(TOKEN_ATTR_NAME, csrfToken)
+                .param(csrfToken.getParameterName(), csrfToken.getToken()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("project/new"));
+
         mockMvc.perform(post("/project/save").param("name", "test")
                 .sessionAttr(TOKEN_ATTR_NAME, csrfToken)
                 .param(csrfToken.getParameterName(), csrfToken.getToken()))
@@ -105,6 +112,7 @@ class ProjectControllerTest {
                 .andExpect(view().name("redirect:/project"));
 
         verify(service, times(1)).save(Mockito.any(ProjectCommand.class));
+
     }
 
     @Test
