@@ -40,3 +40,5 @@ INSERT INTO roles_privileges (role_id, privilege_id) VALUES (2, 8);
 INSERT INTO roles_privileges (role_id, privilege_id) VALUES (3, 2);
 INSERT INTO roles_privileges (role_id, privilege_id) VALUES (3, 4);
 INSERT INTO roles_privileges (role_id, privilege_id) VALUES (3, 7);
+
+INSERT INTO comment (todo_id, user_id, comment) VALUES (1, 1, 'Test Comment');
