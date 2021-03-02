@@ -15,9 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -39,10 +37,10 @@ class UserDetailsServiceImplTest {
 
     @Test
     void loadUserByUsername() {
-        List<Privilege> privileges = new ArrayList<>();
+        Set<Privilege> privileges = new HashSet<>();
         privileges.add(Privilege.builder().id(1L).name("WRITE").build());
 
-        List<Role> roles = new ArrayList<>();
+        Set<Role> roles = new HashSet<>();
         roles.add(Role.builder().id(1L).name("ADMIN").privileges(privileges).build());
 
         User user = User.builder()

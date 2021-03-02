@@ -21,6 +21,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -118,5 +121,28 @@ class UserServiceImplTest {
 
     @Test
     void findAllUsernames() {
+        Set<User> users = new HashSet<>();
+        users.add(User.builder().username("user 1").build());
+        users.add(User.builder().username("user 2").build());
+
+        when(userRepository.findAll()).thenReturn(users);
+
+        Set<String> foundUsernames = userService.findAllUsernames();
+
+        assertEquals(foundUsernames.size(), 2);
+    }
+
+    @Test
+    void saveUserRole() {
+        Set<Role> roles = new HashSet<>();
+        roles.add(Role.builder().id(1L).name("Role").build());
+        User user = User.builder().build();
+
+        when(userRepository.findByUsername(Mockito.anyString())).thenReturn(user);
+        when(userRepository.save(Mockito.any())).thenReturn(user);
+
+        userService.saveUserRole("test", roles);
+
+        verify(userRepository, times(1)).save(any());
     }
 }

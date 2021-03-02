@@ -27,8 +27,8 @@ public class AdminPageController {
     }
 
     @GetMapping({"","user","role/{id}"})
-    String getPrivileges(@PathVariable(value = "id",required = false) Long id,
-                         @ModelAttribute(value = "username", binding = false) String username, Model model){
+    String getAdminPage(@PathVariable(value = "id",required = false) Long id,
+                         @ModelAttribute(value = "username") String username, Model model){
 
         model.addAttribute("allPrivileges", privilegeRepository.findAll());
         model.addAttribute("allRoles", roleRepository.findAll());
