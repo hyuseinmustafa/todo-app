@@ -6,6 +6,7 @@ import com.hyusein.mustafa.todoapp.model.Comment;
 import java.util.Set;
 
 public interface CommentService {
+    Comment findById(Long id);
     Set<Comment> findAllByTodoId(Long id);
-    Comment add(CommentCommand commentCommand);
+    Comment save(CommentCommand commentCommand);
 }

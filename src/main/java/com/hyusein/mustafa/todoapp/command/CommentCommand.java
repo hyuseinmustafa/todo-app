@@ -24,7 +24,6 @@ public class CommentCommand {
     private String comment;
 
     @Builder
-
     public CommentCommand(Long id, Long todoId, String comment) {
         this.id = id;
         this.todoId = todoId;

@@ -1,7 +1,9 @@
 package com.hyusein.mustafa.todoapp.controller;
 
 import com.hyusein.mustafa.todoapp.command.CommentCommand;
+import com.hyusein.mustafa.todoapp.model.Comment;
 import com.hyusein.mustafa.todoapp.service.CommentService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -37,13 +39,29 @@ public class CommentController {
         return "comment/new";
     }
 
+    @GetMapping({"/edit/{id}", "/edit/{id}/"})
+    public String getEditCommentPage(@PathVariable("id") Long id, Model model){
+        Comment comment = commentService.findById(id);
+        if(comment != null) {
+            CommentCommand commentCommand = new CommentCommand();
+            commentCommand.setId(comment.getId());
+            commentCommand.setTodoId(comment.getTodo().getId());
+            commentCommand.setComment(comment.getComment());
+
+            model.addAttribute("new_comment", commentCommand);
+
+            return "comment/new";
+        }
+        return "redirect:/";//comment not found response or not authorized
+    }
+
     @PostMapping({"/save"})
     public String saveNewComment(@Valid @ModelAttribute("new_comment") CommentCommand commentCommand,
                                  BindingResult result){
         if(result.hasErrors()){
             return "comment/new";
         }
-        commentService.add(commentCommand);
+        commentService.save(commentCommand);
         return "redirect:/comments/" + commentCommand.getTodoId();
     }
 }

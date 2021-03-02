@@ -6,9 +6,11 @@ import com.hyusein.mustafa.todoapp.model.Todo;
 import com.hyusein.mustafa.todoapp.model.User;
 import com.hyusein.mustafa.todoapp.repository.CommentRepository;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -30,17 +32,34 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment add(CommentCommand commentCommand) {
+    public Comment findById(Long id) {
+        return this.commentRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Comment save(CommentCommand commentCommand) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Todo todo = todoService.findById(commentCommand.getTodoId());
         User user = userService.findByUsername(authentication.getName());
 
         if(user != null && todo != null) {
-            Comment comment = new Comment();
-            comment.setComment(commentCommand.getComment());
-            comment.setTodo(todo);
-            comment.setUser(user);
-            return commentRepository.save(comment);
+            if(commentCommand.getId() == null) {
+                Comment comment = new Comment();
+                comment.setComment(commentCommand.getComment());
+                comment.setTodo(todo);
+                comment.setUser(user);
+                return commentRepository.save(comment);
+            }else {
+                Optional<Comment> comment = commentRepository.findById(commentCommand.getId());
+                if(comment.isPresent()) {
+                    if(comment.get().getUser().getUsername().equals(authentication.getName()) ||
+                            authentication.getAuthorities().stream()
+                                    .map(GrantedAuthority::getAuthority).anyMatch("EDIT_COMMENT"::equals)) {
+                        comment.get().setComment(commentCommand.getComment());
+                        return commentRepository.save(comment.get());
+                    }
+                }
+            }
         }
         return null;
     }
