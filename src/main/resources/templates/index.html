@@ -41,9 +41,9 @@
                         <td th:text="${todo.headline}">Thing</td>
                         <td th:text="${todo.description}">Do this</td>
                         <td>
-                            <span th:text="${todo.comments.size}">Comment size</span>
                             <a class="btn-sm btn-primary" href="#" role="button"
                                th:href="@{'/comments/' + ${todo.id}}">View</a>
+                            <span th:if="${not #lists.isEmpty(todo.comments)}" th:text="${#lists.size(todo.comments)}">Comment size</span>
                         </td>
                         <td th:text="${todo.assignedUser?.username}">Assigned User</td>
                         <td th:text="${#dates.format(todo.deadline, 'dd/MM/yyyy')}">Deadline</td>
