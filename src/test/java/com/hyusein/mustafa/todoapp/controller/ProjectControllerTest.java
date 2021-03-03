@@ -1,8 +1,10 @@
 package com.hyusein.mustafa.todoapp.controller;
 
 import com.hyusein.mustafa.todoapp.command.ProjectCommand;
+import com.hyusein.mustafa.todoapp.enums.Priority;
 import com.hyusein.mustafa.todoapp.model.Project;
 import com.hyusein.mustafa.todoapp.service.ProjectService;
+import io.florianlopes.spring.test.web.servlet.request.MockMvcRequestBuilderUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -94,25 +96,29 @@ class ProjectControllerTest {
     @Test
     @WithMockUser(authorities = {"CREATE_PROJECT"})
     void saveNewProjectPage() throws Exception {
-        Project project = Project.builder().id(1L).name("test").build();
+        Project project = Project.builder().id(1L).build();
+
+        ProjectCommand projectCommand = ProjectCommand.builder()
+                .name("asd")
+                .priority(Priority.LOW)
+                .build();
 
         when(service.save(Mockito.any())).thenReturn(project);
 
         //check validation
-        mockMvc.perform(post("/project/save")
+        mockMvc.perform(MockMvcRequestBuilderUtils.postForm("/project/save", null)
                 .sessionAttr(TOKEN_ATTR_NAME, csrfToken)
                 .param(csrfToken.getParameterName(), csrfToken.getToken()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("project/new"));
 
-        mockMvc.perform(post("/project/save").param("name", "test")
+        mockMvc.perform(MockMvcRequestBuilderUtils.postForm("/project/save", projectCommand)
                 .sessionAttr(TOKEN_ATTR_NAME, csrfToken)
                 .param(csrfToken.getParameterName(), csrfToken.getToken()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/project"));
 
         verify(service, times(1)).save(Mockito.any(ProjectCommand.class));
-
     }
 
     @Test

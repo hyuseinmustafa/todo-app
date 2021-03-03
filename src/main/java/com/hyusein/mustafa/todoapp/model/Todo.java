@@ -2,7 +2,8 @@ package com.hyusein.mustafa.todoapp.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.hyusein.mustafa.todoapp.ToDoStatus;
+import com.hyusein.mustafa.todoapp.enums.Priority;
+import com.hyusein.mustafa.todoapp.enums.ToDoStatus;
 import com.hyusein.mustafa.todoapp.tool.Tool;
 import lombok.*;
 
@@ -29,6 +30,9 @@ public class Todo extends Auditable<String> implements Tool{
     @Enumerated(EnumType.STRING)
     private ToDoStatus status;
 
+    @Enumerated(EnumType.STRING)
+    private Priority priority;
+
     @JsonManagedReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "project_id")
@@ -49,14 +53,16 @@ public class Todo extends Auditable<String> implements Tool{
     private Set<Comment> comments;
 
     @Builder
-    public Todo(Long id, String headline, String description, ToDoStatus status, Project project,
-                User assignedUser, Date deadline, Set<Comment> comments) {
+    public Todo(Long id, String headline, String description, ToDoStatus status, Priority priority,
+                Project project, User assignedUser, User doneBy, Date deadline, Set<Comment> comments) {
         this.id = id;
         this.headline = headline;
         this.description = description;
         this.status = status;
+        this.priority = priority;
         this.project = project;
         this.assignedUser = assignedUser;
+        this.doneBy = doneBy;
         this.deadline = deadline;
         this.comments = comments;
     }

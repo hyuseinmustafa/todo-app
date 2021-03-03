@@ -27,6 +27,7 @@
                         <th>Description</th>
                         <th>Comments</th>
                         <th>Assigned User</th>
+                        <th>Priority</th>
                         <th>Deadline</th>
                         <th>Status</th>
                         <th></th>
@@ -50,8 +51,9 @@
                             <span th:if="${not #lists.isEmpty(todo.comments)}" th:text="${#lists.size(todo.comments)}">Comment size</span>
                         </td>
                         <td th:text="${todo.assignedUser?.username}">Assigned User</td>
+                        <td th:text="${todo.priority?.value}">Priority</td>
                         <td th:text="${#dates.format(todo.deadline, 'dd/MM/yyyy')}">Deadline</td>
-                        <td th:text="${todo.status}">Waiting</td>
+                        <td th:text="${todo.status?.value}">Waiting</td>
                         <td>
                             <a class="btn-sm btn-primary float-right" href="#" role="button"
                                th:href="@{'/todo/'+ ${todo.id} +'/done'}"

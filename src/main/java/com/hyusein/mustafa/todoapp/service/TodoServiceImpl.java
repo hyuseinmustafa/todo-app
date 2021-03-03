@@ -1,6 +1,6 @@
 package com.hyusein.mustafa.todoapp.service;
 
-import com.hyusein.mustafa.todoapp.ToDoStatus;
+import com.hyusein.mustafa.todoapp.enums.ToDoStatus;
 import com.hyusein.mustafa.todoapp.command.TodoCommand;
 import com.hyusein.mustafa.todoapp.converter.TodoCommandToTodoConverter;
 import com.hyusein.mustafa.todoapp.model.Todo;
@@ -56,7 +56,6 @@ public class TodoServiceImpl implements TodoService{
         todoRepository.deleteById(id);
     }
 
-    @Transactional
     @Override
     public void done(Long id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -73,18 +72,17 @@ public class TodoServiceImpl implements TodoService{
                 .ifPresent(todo -> {
                     todo.setStatus(ToDoStatus.FINISHED);
                     todo.setDoneBy(userService.findByUsername(authentication.getName()));
-                    todoRepository.save(todo);
+                    this.save(todo);
                 });
     }
 
-    @Transactional
     @Override
     public Todo assignUser(Long todoId, String username) {
         Todo todo = findById(todoId);
         if(todo != null) {
             if(todo.getStatus() != ToDoStatus.FINISHED) {
                 todo.setAssignedUser(userService.findByUsername(username));
-                return save(todo);
+                return this.save(todo);
             }
         }
         return null;

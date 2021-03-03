@@ -1,6 +1,7 @@
 package com.hyusein.mustafa.todoapp.command;
 
-import com.hyusein.mustafa.todoapp.ToDoStatus;
+import com.hyusein.mustafa.todoapp.enums.Priority;
+import com.hyusein.mustafa.todoapp.enums.ToDoStatus;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,9 @@ public class TodoCommand {
     @NotNull
     private ToDoStatus status;
 
+    @NotNull
+    private Priority priority;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date deadline;
 
@@ -37,12 +41,13 @@ public class TodoCommand {
     private ProjectCommand project;
 
     @Builder
-
-    public TodoCommand(Long id, String headline, String description, ToDoStatus status, Date deadline, ProjectCommand project) {
+    public TodoCommand(Long id, String headline, String description, ToDoStatus status, Priority priority,
+                       Date deadline, ProjectCommand project) {
         this.id = id;
         this.headline = headline;
         this.description = description;
         this.status = status;
+        this.priority = priority;
         this.deadline = deadline;
         this.project = project;
     }

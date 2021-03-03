@@ -1,8 +1,8 @@
-INSERT INTO project (name) VALUES ('Todo');
-INSERT INTO project (name) VALUES ('NewPrj');
-INSERT INTO todo (headline, description, status, project_id) VALUES ('Test Task 1', 'We have to do this task right now 1', 'FINISHED', 1);
-INSERT INTO todo (headline, description, status, project_id) VALUES ('Test Task 2', 'We have to do this task right now 2', 'WAITING', 1);
-INSERT INTO todo (headline, description, status, project_id) VALUES ('Initial Task', 'We have to find new project', 'WAITING', 2);
+INSERT INTO project (name, deadline, priority) VALUES ('Todo', '2022-01-01', 'LOW');
+INSERT INTO project (name, deadline, priority) VALUES ('NewPrj', '2022-02-01', 'MEDIUM');
+INSERT INTO todo (headline, description, status, project_id, deadline, priority) VALUES ('Test Task 1', 'We have to do this task right now 1', 'FINISHED', 1, '2021-03-21', 'LOW');
+INSERT INTO todo (headline, description, status, project_id, deadline, priority) VALUES ('Test Task 2', 'We have to do this task right now 2', 'WAITING', 1, '2021-04-04', 'URGENT');
+INSERT INTO todo (headline, description, status, project_id, deadline, priority) VALUES ('Initial Task', 'We have to find new project', 'WAITING', 2, '2021-05-15', 'HIGH');
 
 INSERT INTO privilege (name, id) VALUES ('DELETE_TODO', 1);
 INSERT INTO privilege (name, id) VALUES ('EDIT_TODO', 2);
@@ -44,4 +44,5 @@ INSERT INTO roles_privileges (role_id, privilege_id) VALUES (3, 2);
 INSERT INTO roles_privileges (role_id, privilege_id) VALUES (3, 4);
 INSERT INTO roles_privileges (role_id, privilege_id) VALUES (3, 7);
 
-INSERT INTO comment (todo_id, user_id, comment) VALUES (1, 1, 'Test Comment');
+INSERT INTO comment (todo_id, user_id, comment) VALUES (1, 1, 'Test Comment 1');
+INSERT INTO comment (todo_id, user_id, comment) VALUES (2, 2, 'Test Comment 2');

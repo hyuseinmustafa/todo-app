@@ -1,6 +1,7 @@
 package com.hyusein.mustafa.todoapp.controller;
 
-import com.hyusein.mustafa.todoapp.ToDoStatus;
+import com.hyusein.mustafa.todoapp.enums.Priority;
+import com.hyusein.mustafa.todoapp.enums.ToDoStatus;
 import com.hyusein.mustafa.todoapp.command.AssignCommand;
 import com.hyusein.mustafa.todoapp.command.ProjectCommand;
 import com.hyusein.mustafa.todoapp.command.TodoCommand;
@@ -14,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -26,7 +26,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.*;
 
 import static org.hamcrest.Matchers.hasProperty;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -133,10 +132,6 @@ class TodoControllerTest {
     void saveNewToDoPage() throws Exception {
         Todo todo = Todo.builder()
                 .id(1L)
-                .headline("headline")
-                .description("")
-                .status(ToDoStatus.WAITING)
-                .project(Project.builder().id(2L).name("name").build())
                 .build();
 
         TodoCommand todoCommand = TodoCommand.builder()
@@ -144,6 +139,7 @@ class TodoControllerTest {
                 .headline("headline")
                 .description("")
                 .status(ToDoStatus.WAITING)
+                .priority(Priority.MEDIUM)
                 .project(ProjectCommand.builder().id(2L).name("name").build())
                 .build();
 

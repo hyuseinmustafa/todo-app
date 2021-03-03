@@ -1,6 +1,6 @@
 package com.hyusein.mustafa.todoapp.model;
 
-import com.hyusein.mustafa.todoapp.ToDoStatus;
+import com.hyusein.mustafa.todoapp.enums.ToDoStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

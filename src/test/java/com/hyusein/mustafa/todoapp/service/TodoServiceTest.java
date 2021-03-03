@@ -1,6 +1,6 @@
 package com.hyusein.mustafa.todoapp.service;
 
-import com.hyusein.mustafa.todoapp.ToDoStatus;
+import com.hyusein.mustafa.todoapp.enums.ToDoStatus;
 import com.hyusein.mustafa.todoapp.command.ProjectCommand;
 import com.hyusein.mustafa.todoapp.command.TodoCommand;
 import com.hyusein.mustafa.todoapp.model.Project;
@@ -19,7 +19,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.*;
 

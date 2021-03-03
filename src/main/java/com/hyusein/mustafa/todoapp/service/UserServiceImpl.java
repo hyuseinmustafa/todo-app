@@ -79,6 +79,7 @@ public class UserServiceImpl implements UserService {
                 .map(User::getUsername).collect(Collectors.toSet());
     }
 
+    @Transactional
     @Override
     public void saveUserRole(String username, Collection<Role> roles) {
         User userFound = this.findByUsername(username);

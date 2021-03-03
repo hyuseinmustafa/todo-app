@@ -71,7 +71,6 @@ public class TodoController {
 
     @PreAuthorize("(hasAuthority('EDIT_TODO') and #todo.id != null) or (hasAuthority('CREATE_TODO') and #todo.id == null)")
     @PostMapping({"/save"})
-    @Transactional
     public String saveNewToDoPage(@Valid @ModelAttribute("neworedit_todo") TodoCommand todo, BindingResult result, Model model){
         if(result.hasErrors()){
             log.error("New ToDo page post Validation error.");

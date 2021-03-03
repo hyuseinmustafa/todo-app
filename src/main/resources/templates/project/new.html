@@ -23,6 +23,13 @@
                     <label for="deadline">Deadline</label>
                     <span class="text-danger" th:if="${#fields.hasErrors('deadline')}" th:errors="*{deadline}">dadline Error</span>
                     <input type="date" class="form-control" id="deadline" th:field="*{deadline}"/>
+                    <label for="priority">Priority</label>
+                    <span class="text-danger" th:if="${#fields.hasErrors('priority')}" th:errors="*{priority}">priority Error</span>
+                    <select class="form-control" id="priority" th:field="*{priority}">
+                        <option value="" selected="selected"  hidden></option>
+                        <option th:each="prt : ${T(com.hyusein.mustafa.todoapp.enums.Priority).values()}"
+                                th:value="${prt.name}" th:text="${prt.value}">options</option>
+                    </select>
                 </div>
                 <button type="submit" class="btn btn-primary">Save</button>
             </form>

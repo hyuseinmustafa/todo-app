@@ -1,6 +1,6 @@
 package com.hyusein.mustafa.todoapp.converter;
 
-import com.hyusein.mustafa.todoapp.ToDoStatus;
+import com.hyusein.mustafa.todoapp.enums.ToDoStatus;
 import com.hyusein.mustafa.todoapp.command.ProjectCommand;
 import com.hyusein.mustafa.todoapp.command.TodoCommand;
 import com.hyusein.mustafa.todoapp.model.Project;
