@@ -61,7 +61,9 @@ public class CommentController {
         if(result.hasErrors()){
             return "comment/new";
         }
-        commentService.save(commentCommand);
-        return "redirect:/comments/" + commentCommand.getTodoId();
+        if(commentService.save(commentCommand) != null)
+            return "redirect:/comments/" + commentCommand.getTodoId();
+        else
+            return "redirect:/";
     }
 }
