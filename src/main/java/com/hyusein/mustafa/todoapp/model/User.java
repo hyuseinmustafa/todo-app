@@ -1,5 +1,6 @@
 package com.hyusein.mustafa.todoapp.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -42,10 +44,13 @@ public class User extends Auditable<String> implements Serializable {
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Collection<Role> roles;
 
+    @JsonBackReference
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private Set<Comment> comments;
+
     @Builder
-    public User(Long id, String username, String password,
-                String firstName, String lastName,
-                boolean enabled, String email, Collection<Role> roles) {
+    public User(Long id, String username, String password, String firstName, String lastName,
+                boolean enabled, String email, Collection<Role> roles, Set<Comment> comments) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -54,5 +59,6 @@ public class User extends Auditable<String> implements Serializable {
         this.enabled = enabled;
         this.email = email;
         this.roles = roles;
+        this.comments = comments;
     }
 }

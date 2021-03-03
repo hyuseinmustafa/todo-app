@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Comments View Page</title>
+    <!--/*/ <th:block th:include="fragments/general.html :: headerfiles">
+            </th:block> /*/-->
+</head><body>
+<div class="container p-3 my-3 bg-dark text-white">
+    <header th:insert="fragments/general.html :: header"> </header>
+    <div th:replace="fragments/general.html :: footer"></div>
+
+    <div class="row">
+        <div class="col">
+            <a class="btn btn-primary" href="#" role="button"
+               th:href="@{'/comments/' + ${todoId} + '/new'}">Add New Comment</a>
+        </div>
+    </div>
+    <div class="row" th:if= "${not #lists.isEmpty(comment_list)}">
+        <div class="col">
+            <table class="table-dark table-hover col-md-12">
+                <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Comment</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="comment: ${comment_list}">
+                    <td th:text="${comment.user.username}">name</td>
+                    <td th:text="${comment.comment}">comment</td>
+                    <td>
+                        <a class="btn-sm btn-primary float-right" href="#" role="button"
+                           th:href="@{'/comments/edit/'+ ${comment.id}}"
+                           th:if= "${comment.user?.username == #authentication.name or
+                                #authorization.expression('hasAuthority(''EDIT_COMMENT'')')}">Edit</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
